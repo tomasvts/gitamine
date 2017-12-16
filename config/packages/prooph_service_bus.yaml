@@ -1,0 +1,13 @@
+prooph_service_bus:
+  command_buses:
+    gitamine_command_bus: ~
+  query_buses:
+    gitamine_query_bus: ~
+
+services:
+  Gitamine\Handler\FetchCommitedFilesHandler:
+    arguments: []
+    public: true
+    tags:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchCommitedFiles }
+
