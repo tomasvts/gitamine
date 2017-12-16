@@ -4,32 +4,32 @@ declare(strict_types=1);
 namespace Gitamine\Query;
 
 /**
- * Class FetchCommitedFiles
+ * Class FetchCommittedFiles
  *
  * @package Gitamine\Query
  */
-class FetchCommitedFiles
+class FetchCommittedFiles
 {
     /**
      * @var string
      */
-    private $name;
+    private $dir;
 
     /**
      * FetchCommitedFiles constructor.
      *
-     * @param string $name
+     * @param string $dir
      */
-    public function __construct(string $name)
+    public function __construct(string $dir)
     {
-        $this->name = $name;
+        $this->dir = $dir;
     }
 
     /**
      * @return string
      */
-    public function name(): string
+    public function dir(): string
     {
-        return $this->name;
+        return $this->dir;
     }
 }

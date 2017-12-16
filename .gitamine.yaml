@@ -1,10 +1,11 @@
 gitamine:
-  phpunit:
-    enable: false
-    bin: phpunit
-    flags: --color=false
-  symfony:
-    enable: true
-    bin: bin/console
-  phpcs: ~
-  phplint: ~
+  plugins:
+    phpunit:
+      enable: false
+      bin: phpunit
+      flags: --color=false
+    symfony:
+      enable: true
+      bin: bin/console
+    phpcs: ~
+    phplint: ~
