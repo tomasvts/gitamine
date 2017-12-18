@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Gitamine\Query;
 
 /**
- * Class FetchModifiedFiles
+ * Class FetchDeletedFilesQuery
  *
  * @package Gitamine\Query
  */
-class FetchModifiedFiles
+class FetchDeletedFilesQuery
 {
     /**
      * @var string

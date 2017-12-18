@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Prooph\SynchronousQueryBus;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
-use Gitamine\Query\FetchModifiedFiles;
-use Gitamine\Query\GetProjectDirectory;
+use Gitamine\Query\FetchModifiedFilesQuery;
+use Gitamine\Query\GetProjectDirectoryQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class FilesModifiedCommand extends ContainerAwareCommand
 {
+    /**
+     * @var SynchronousQueryBus;
+     */
+    private $bus;
+
     protected function configure(): void
     {
         $this
@@ -33,14 +39,19 @@ class FilesModifiedCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
+
         try {
             $projectDir = $this->getProjectDirectory();
-            $files      = $this->getAddedFiles($projectDir);
+            $files      = $this->getModifiedFiles($projectDir);
+            sort($files);
 
             foreach ($files as $file) {
                 $output->writeln($file);
             }
         } catch (InvalidSubversionDirectoryException $e) {
+            $output->writeln("<error>{$e->getMessage()}</error>");
+
             return $e->getCode();
         }
 
@@ -52,11 +63,9 @@ class FilesModifiedCommand extends ContainerAwareCommand
      *
      * @return string[]
      */
-    protected function getAddedFiles(string $dir): array
+    protected function getModifiedFiles(string $dir): array
     {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new FetchModifiedFiles($dir));
+        return $this->bus->dispatch(new FetchModifiedFilesQuery($dir));
     }
 
     /**
@@ -64,8 +73,6 @@ class FilesModifiedCommand extends ContainerAwareCommand
      */
     protected function getProjectDirectory(): string
     {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new GetProjectDirectory());
+        return $this->bus->dispatch(new GetProjectDirectoryQuery());
     }
 }

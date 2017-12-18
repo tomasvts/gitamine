@@ -23,11 +23,11 @@ interface SubversionRepository
     /**
      * @param Directory $dir
      *
-     * @return string
+     * @return Directory
      *
      * @throws InvalidSubversionDirectoryException
      */
-    public function getRootDir(Directory $dir): string;
+    public function getRootDir(Directory $dir): Directory;
 
     /**
      * @param Directory $dir

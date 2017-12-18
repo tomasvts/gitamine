@@ -5,18 +5,18 @@ namespace App\Command;
 
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
-use Gitamine\Query\FetchAddedFilesQuery;
+use Gitamine\Query\FetchDeletedFilesQuery;
 use Gitamine\Query\GetProjectDirectoryQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class FilesAddedCommand
+ * Class FilesDeletedCommand
  *
  * @package App\Command
  */
-class FilesAddedCommand extends ContainerAwareCommand
+class FilesDeletedCommand extends ContainerAwareCommand
 {
     /**
      * @var SynchronousQueryBus;
@@ -26,9 +26,9 @@ class FilesAddedCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('files:added')
-            ->setDescription('added files')
-            ->setHelp('added files');
+            ->setName('files:deleted')
+            ->setDescription('del files')
+            ->setHelp('del files');
     }
 
     /**
@@ -43,7 +43,7 @@ class FilesAddedCommand extends ContainerAwareCommand
 
         try {
             $projectDir = $this->getProjectDirectory();
-            $files      = $this->getAddedFiles($projectDir);
+            $files      = $this->getDeletedFiles($projectDir);
             sort($files);
 
             foreach ($files as $file) {
@@ -51,6 +51,7 @@ class FilesAddedCommand extends ContainerAwareCommand
             }
         } catch (InvalidSubversionDirectoryException $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
+
             return $e->getCode();
         }
 
@@ -62,9 +63,9 @@ class FilesAddedCommand extends ContainerAwareCommand
      *
      * @return string[]
      */
-    protected function getAddedFiles(string $dir): array
+    protected function getDeletedFiles(string $dir): array
     {
-        return $this->bus->dispatch(new FetchAddedFilesQuery($dir));
+        return $this->bus->dispatch(new FetchDeletedFilesQuery($dir));
     }
 
     /**

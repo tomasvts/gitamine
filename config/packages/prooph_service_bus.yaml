@@ -5,38 +5,49 @@ prooph_service_bus:
     gitamine_query_bus: ~
 
 services:
-  Gitamine\Handler\FetchCommittedFilesHandler:
+  Gitamine\Handler\FetchCommittedFilesQueryHandler:
     arguments: ['@subversion.repository']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchCommittedFiles }
-  Gitamine\Handler\FetchAddedFilesHandler:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchCommittedFilesQuery }
+  Gitamine\Handler\FetchAddedFilesQueryHandler:
     arguments: ['@subversion.repository']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchAddedFiles }
-  Gitamine\Handler\FetchModifiedFilesHandler:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchAddedFilesQuery }
+  Gitamine\Handler\FetchModifiedFilesQueryHandler:
     arguments: ['@subversion.repository']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchModifiedFiles }
-  Gitamine\Handler\FetchDeletedFilesHandler:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchModifiedFilesQuery }
+  Gitamine\Handler\FetchDeletedFilesQueryHandler:
     arguments: ['@subversion.repository']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchDeletedFiles }
-  Gitamine\Handler\GetGitamineDirectoryHandler:
-    arguments: []
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\FetchDeletedFilesQuery }
+  Gitamine\Handler\GetGitamineDirectoryQueryHandler:
+    arguments: ['@gitamine.config']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetGitamineDirectory }
-  Gitamine\Handler\GetProjectDirectoryHandler:
-    arguments: []
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetGitamineDirectoryQuery }
+  Gitamine\Handler\GetGitamineConfigurationQueryHandler:
+    arguments: ['@subversion.repository', '@gitamine.config']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetProjectDirectory }
-  Gitamine\Handler\GetGitamineConfHandler:
-    arguments: ['@subversion.repository']
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetGitamineConfigurationQuery }
+  Gitamine\Handler\GetConfiguratedPluginsQueryHandler:
+    arguments: ['@prooph_service_bus.gitamine_query_bus', '@gitamine.config']
     public: true
     tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetGitamineConf }
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetConfiguratedPluginsQuery }
+  Gitamine\Handler\RunPluginCommandHandler:
+    arguments: ['@prooph_service_bus.gitamine_query_bus', '@gitamine.config']
+    public: true
+    tags:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Command\RunPluginCommand }
+  Gitamine\Handler\GetProjectDirectoryQueryHandler:
+    arguments: ['@gitamine.config']
+    public: true
+    tags:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetProjectDirectoryQuery }
+

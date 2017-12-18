@@ -9,11 +9,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class InstallPluginCommand
+ * Class SelfUpdateCommand
  *
  * @package App\Command
  */
-class InstallPluginCommand extends ContainerAwareCommand
+class SelfUpdateCommand extends ContainerAwareCommand
 {
     /**
      * @var SynchronousQueryBus;
@@ -24,7 +24,7 @@ class InstallPluginCommand extends ContainerAwareCommand
     {
         $this
             ->setName('install')
-            ->setDescription('installs a plugin')
+            ->setDescription('updates gitamine')
             ->setHelp('TODO');
     }
 

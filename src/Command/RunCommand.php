@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Gitamine\Query\FetchCommittedFiles;
-use Gitamine\Query\GetGitamineConf;
-use Gitamine\Query\GetGitamineDirectory;
-use Gitamine\Query\GetProjectDirectory;
+use Gitamine\Command\RunPluginCommand;
+use Gitamine\Exception\PluginExecutionFailedException;
+use Gitamine\Query\GetConfiguratedPluginsQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +22,7 @@ class RunCommand extends ContainerAwareCommand
         $this
             ->setName('run')
             ->setDescription('run')
-            ->setHelp('run');
+            ->setHelp('runs plugins');
     }
 
     /**
@@ -34,60 +33,20 @@ class RunCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $gitamineDir  = $this->getGitamineDirectory();
-        $projectDir   = $this->getProjectDirectory();
-        $files        = $this->getCommitedFiles($projectDir);
-        $gitamineConf = $this->getGitamineConf($projectDir);
+        $queryBus   = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
+        $commandBus = $this->getContainer()->get('prooph_service_bus.gitamine_command_bus');
 
-        dump($files);
-        dump($gitamineDir);
-        dump($projectDir);
-        dump($gitamineConf);
+        /** @var string[] $plugins */
+        $plugins = $queryBus->dispatch(new GetConfiguratedPluginsQuery());
 
-        return 1;
-    }
+        foreach ($plugins as $plugin) {
+            try {
+                $queryBus->dispatch(new RunPluginCommand($plugin));
+            } catch (PluginExecutionFailedException $e) {
+                return $e->getCode();
+            }
+        }
 
-    /**
-     * @param string $dir
-     *
-     * @return string[]
-     */
-    protected function getCommitedFiles(string $dir): array
-    {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new FetchCommittedFiles($dir));
-    }
-
-    /**
-     * @return string
-     */
-    protected function getGitamineDirectory(): string
-    {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new GetGitamineDirectory());
-    }
-
-    /**
-     * @return string
-     */
-    protected function getProjectDirectory(): string
-    {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new GetProjectDirectory());
-    }
-
-    /**
-     * @param string $dir
-     *
-     * @return array
-     */
-    protected function getGitamineConf(string $dir): array
-    {
-        return $this->getContainer()
-                    ->get('prooph_service_bus.gitamine_query_bus')
-                    ->dispatch(new GetGitamineConf($dir));
+        return 0;
     }
 }

@@ -19,3 +19,5 @@ services:
 
     subversion.repository:
         class: App\SubversionRepository\GitRepository
+    gitamine.config:
+        class: App\GitamineConfig\YamlGitamineConfig

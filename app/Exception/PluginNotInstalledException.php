@@ -6,11 +6,11 @@ namespace Gitamine\Exception;
 use Exception;
 
 /**
- * Class InvalidDirException
+ * Class PluginNotInstalledException
  *
  * @package Gitamine\Exception
  */
-class MissingGitamineConfigurationFileException extends Exception
+class PluginNotInstalledException extends Exception
 {
 
 }

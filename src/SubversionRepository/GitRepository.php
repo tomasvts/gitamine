@@ -27,7 +27,7 @@ class GitRepository implements SubversionRepository
     public function isValidSubversionFolder(Directory $dir): bool
     {
         try {
-            $this->run($dir->dir(), 'git status');
+            $this->run($dir, 'git status');
             return true;
         } catch (InvalidSubversionDirectoryException $e) {
             return false;
@@ -37,13 +37,13 @@ class GitRepository implements SubversionRepository
     /**
      * @param Directory $dir
      *
-     * @return string
+     * @return Directory
      *
      * @throws InvalidSubversionDirectoryException
      */
-    public function getRootDir(Directory $dir): string
+    public function getRootDir(Directory $dir): Directory
     {
-        return $this->run($dir->dir(), self::GIT_ROOT)[0];
+        return new Directory($this->run($dir, self::GIT_ROOT)[0]);
     }
 
     /**
@@ -74,6 +74,8 @@ class GitRepository implements SubversionRepository
      * @param Directory $dir
      *
      * @return array
+     *
+     * @throws InvalidSubversionDirectoryException
      */
     public function getDeletedFiles(Directory $dir): array
     {
@@ -81,20 +83,22 @@ class GitRepository implements SubversionRepository
     }
 
     /**
-     * @param string $dir
-     * @param string $command
+     * @param Directory $dir
+     * @param string    $command
      *
      * @return array
+     *
+     * @throws InvalidSubversionDirectoryException
      */
-    private function run(string $dir, string $command): array
+    private function run(Directory $dir, string $command): array
     {
         $error  = 0;
         $output = [];
 
-        exec(sprintf('cd %s 2> /dev/null ; %s 2> /dev/null', $dir, $command), $output, $error);
+        exec(sprintf('cd %s 2> /dev/null ; %s 2> /dev/null', $dir->dir(), $command), $output, $error);
 
         if ($error) {
-            throw new InvalidSubversionDirectoryException('Directory is not a Git Repository');
+            throw new InvalidSubversionDirectoryException($dir);
         }
 
         return $output;

@@ -8,15 +8,14 @@ use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Infrastructure\InvalidSubversionCommand;
 use Gitamine\Infrastructure\InvalidSubversionDirectory;
 use Gitamine\Infrastructure\SubversionRepository;
-use Gitamine\Query\FetchAddedFiles;
-use React\Promise\Deferred;
+use Gitamine\Query\FetchDeletedFilesQuery;
 
 /**
- * Class FetchAddedFilesHandler
+ * Class FetchDeletedFilesQueryHandler
  *
  * @package Gitamine\Handler
  */
-class FetchAddedFilesHandler
+class FetchDeletedFilesQueryHandler
 {
     /**
      * @var SubversionRepository
@@ -24,7 +23,7 @@ class FetchAddedFilesHandler
     private $repository;
 
     /**
-     * FetchCommittedFilesHandler constructor.
+     * FetchCommittedFilesQueryHandler constructor.
      *
      * @param SubversionRepository $repository
      */
@@ -34,27 +33,20 @@ class FetchAddedFilesHandler
     }
 
     /**
-     * @param FetchAddedFiles $query
-     * @param Deferred|null   $deferred
+     * @param FetchDeletedFilesQuery $query
      *
      * @return array
      *
      * @throws InvalidSubversionDirectoryException
      */
-    public function __invoke(FetchAddedFiles $query, Deferred $deferred = null): array
+    public function __invoke(FetchDeletedFilesQuery $query): array
     {
         $dir = new Directory($query->dir());
 
         if (!$this->repository->isValidSubversionFolder($dir)) {
-            throw new InvalidSubversionDirectoryException($dir, 1);
+            throw new InvalidSubversionDirectoryException($dir);
         }
 
-        $files = $this->repository->getNewFiles($dir);
-
-        if ($deferred) {
-            $deferred->resolve($files);
-        }
-
-        return $files;
+        return $this->repository->getDeletedFiles($dir);
     }
 }

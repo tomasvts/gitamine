@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Gitamine\Query;
 
 /**
- * Class GetGitamineDirectory
+ * Class GetConfiguratedPluginsQuery
  *
  * @package Gitamine\Query
  */
-class GetGitamineDirectory
+class GetConfiguratedPluginsQuery
 {
 }

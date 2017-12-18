@@ -8,15 +8,14 @@ use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Infrastructure\InvalidSubversionCommand;
 use Gitamine\Infrastructure\InvalidSubversionDirectory;
 use Gitamine\Infrastructure\SubversionRepository;
-use Gitamine\Query\FetchModifiedFiles;
-use React\Promise\Deferred;
+use Gitamine\Query\FetchCommittedFilesQuery;
 
 /**
- * Class FetchModifiedFilesHandler
+ * Class FetchCommittedFilesQueryHandler
  *
  * @package Gitamine\Handler
  */
-class FetchModifiedFilesHandler
+class FetchCommittedFilesQueryHandler
 {
     /**
      * @var SubversionRepository
@@ -24,7 +23,7 @@ class FetchModifiedFilesHandler
     private $repository;
 
     /**
-     * FetchCommitedFilesHandler constructor.
+     * FetchCommittedFilesQueryHandler constructor.
      *
      * @param SubversionRepository $repository
      */
@@ -34,27 +33,23 @@ class FetchModifiedFilesHandler
     }
 
     /**
-     * @param FetchModifiedFiles $query
-     * @param Deferred|null      $deferred
+     * @param FetchCommittedFilesQuery $query
      *
-     * @return array
+     * @return string[]
      *
      * @throws InvalidSubversionDirectoryException
      */
-    public function __invoke(FetchModifiedFiles $query, Deferred $deferred = null): array
+    public function __invoke(FetchCommittedFilesQuery $query): array
     {
         $dir = new Directory($query->dir());
 
         if (!$this->repository->isValidSubversionFolder($dir)) {
-            throw new InvalidSubversionDirectoryException($dir, 1);
+            throw new InvalidSubversionDirectoryException($dir);
         }
 
-        $files = $this->repository->getUpdatedFiles($dir);
+        $newFiles     = $this->repository->getNewFiles($dir);
+        $updatedFiles = $this->repository->getUpdatedFiles($dir);
 
-        if ($deferred) {
-            $deferred->resolve($files);
-        }
-
-        return $files;
+        return array_merge($newFiles, $updatedFiles);
     }
 }

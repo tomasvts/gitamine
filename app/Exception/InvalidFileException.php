@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Gitamine\Exception;
 
-use Exception;
+use RuntimeException;
 
 /**
- * Class InvalidDirException
+ * Class InvalidFileException
  *
  * @package Gitamine\Exception
  */
-class MissingGitamineConfigurationFileException extends Exception
+class InvalidFileException extends RuntimeException
 {
 
 }

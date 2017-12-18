@@ -7,6 +7,7 @@ use Prooph\Bundle\ServiceBus\NamedMessageBus;
 use Prooph\Bundle\ServiceBus\NamedMessageBusTrait;
 use Prooph\Common\Event\ActionEvent;
 use Prooph\Common\Event\ActionEventEmitter;
+use Prooph\Common\Event\ProophActionEventEmitter;
 use Prooph\ServiceBus\Exception\RuntimeException;
 use Prooph\ServiceBus\MessageBus;
 
@@ -18,7 +19,11 @@ use Prooph\ServiceBus\MessageBus;
 class SynchronousQueryBus extends MessageBus implements NamedMessageBus
 {
     use NamedMessageBusTrait;
+
     public const EVENT_PARAM_RESULT = 'query-result';
+
+    /** @noinspection MagicMethodsValidityInspection */
+    /** @noinspection PhpMissingParentConstructorInspection */
 
     /**
      * SynchronousQueryBus constructor.
@@ -27,7 +32,50 @@ class SynchronousQueryBus extends MessageBus implements NamedMessageBus
      */
     public function __construct(?ActionEventEmitter $actionEventEmitter = null)
     {
-        parent::__construct($actionEventEmitter);
+        if (null === $actionEventEmitter) {
+            $actionEventEmitter = new ProophActionEventEmitter([
+                self::EVENT_DISPATCH,
+                self::EVENT_FINALIZE
+            ]);
+        }
+
+        $actionEventEmitter->attachListener(
+            self::EVENT_DISPATCH,
+            function (ActionEvent $actionEvent): void {
+                $actionEvent->setParam(self::EVENT_PARAM_MESSAGE_HANDLED, false);
+                $message = $actionEvent->getParam(self::EVENT_PARAM_MESSAGE);
+
+                if ($message instanceof HasMessageName) {
+                    $actionEvent->setParam(self::EVENT_PARAM_MESSAGE_NAME, $message->messageName());
+                }
+            },
+            self::PRIORITY_INITIALIZE
+        );
+
+        $actionEventEmitter->attachListener(
+            self::EVENT_DISPATCH,
+            function (ActionEvent $actionEvent): void {
+                if ($actionEvent->getParam(self::EVENT_PARAM_MESSAGE_NAME) === null) {
+                    $actionEvent->setParam(
+                        self::EVENT_PARAM_MESSAGE_NAME,
+                        $this->getMessageName($actionEvent->getParam(self::EVENT_PARAM_MESSAGE))
+                    );
+                }
+            },
+            self::PRIORITY_DETECT_MESSAGE_NAME
+        );
+
+        $actionEventEmitter->attachListener(
+            self::EVENT_FINALIZE,
+            function (ActionEvent $actionEvent): void {
+                $exception = $actionEvent->getParam(self::EVENT_PARAM_EXCEPTION);
+                if ($exception) {
+                    throw $exception;
+                }
+            }
+        );
+
+        $this->events = $actionEventEmitter;
 
         $this->events->attachListener(
             self::EVENT_DISPATCH,
@@ -71,7 +119,7 @@ class SynchronousQueryBus extends MessageBus implements NamedMessageBus
             self::EVENT_DISPATCH,
             $this,
             [
-                self::EVENT_PARAM_MESSAGE => $query,
+                self::EVENT_PARAM_MESSAGE => $query
             ]
         );
 

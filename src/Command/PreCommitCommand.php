@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Prooph\SynchronousQueryBus;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,12 +15,17 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PreCommitCommand extends ContainerAwareCommand
 {
+    /**
+     * @var SynchronousQueryBus;
+     */
+    private $bus;
+
     protected function configure(): void
     {
         $this
             ->setName('pre-commit')
-            ->setDescription('run')
-            ->setHelp('run');
+            ->setDescription('pre-commit')
+            ->setHelp('executes pre-commit hook from plugins');
     }
 
     /**
@@ -30,6 +36,8 @@ class PreCommitCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return 0;
+        $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
+
+        return 1;
     }
 }

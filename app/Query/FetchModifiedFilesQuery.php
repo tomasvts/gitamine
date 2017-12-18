@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Gitamine\Query;
 
 /**
- * Class GetProjectDirectory
+ * Class FetchModifiedFilesQuery
  *
  * @package Gitamine\Query
  */
-class GetGitamineConf
+class FetchModifiedFilesQuery
 {
     /**
      * @var string
@@ -16,7 +16,7 @@ class GetGitamineConf
     private $dir;
 
     /**
-     * GetGitamineConf constructor.
+     * FetchCommitedFiles constructor.
      *
      * @param string $dir
      */

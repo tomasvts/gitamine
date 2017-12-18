@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Gitamine\Query;
 
 /**
- * Class GetProjectDirectory
+ * Class GetGitamineDirectoryQuery
  *
  * @package Gitamine\Query
  */
-class GetProjectDirectory
+class GetGitamineDirectoryQuery
 {
 }

@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use Gitamine\Query\FetchCommittedFiles;
-use Gitamine\Query\GetGitamineDirectory;
-use Gitamine\Query\GetProjectDirectory;
+use App\Prooph\SynchronousQueryBus;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,12 +15,17 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpdatePluginsCommand extends ContainerAwareCommand
 {
+    /**
+     * @var SynchronousQueryBus;
+     */
+    private $bus;
+
     protected function configure(): void
     {
         $this
             ->setName('update')
-            ->setDescription('update')
-            ->setHelp('update');
+            ->setDescription('update plugins')
+            ->setHelp('TODO');
     }
 
     /**
@@ -33,6 +36,8 @@ class UpdatePluginsCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
+
         return 1;
     }
 }
