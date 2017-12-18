@@ -1,4 +1,4 @@
-#Gitamine 
+# Gitamine 
 
 US: **/ɡɪtəˈ.miː.n/** \
 UK: **/ɡɪtˈæ.miːn/**
