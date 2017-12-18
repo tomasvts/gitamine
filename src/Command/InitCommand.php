@@ -24,7 +24,7 @@ class InitCommand extends ContainerAwareCommand
     {
         $this
             ->setName('init')
-            ->setDescription('initialize hooks')
+            ->setDescription('TODO')
             ->setHelp('TODO');
     }
 

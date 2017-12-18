@@ -977,16 +977,16 @@
         },
         {
             "name": "prooph/service-bus",
-            "version": "v6.1.1",
+            "version": "v6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/prooph/service-bus.git",
-                "reference": "6a98854fc83e0188e5a1a9d4b1e0efac09cfd46f"
+                "reference": "c239acfd43cf8eec577e30ce0aa7da86d87b6191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/prooph/service-bus/zipball/6a98854fc83e0188e5a1a9d4b1e0efac09cfd46f",
-                "reference": "6a98854fc83e0188e5a1a9d4b1e0efac09cfd46f",
+                "url": "https://api.github.com/repos/prooph/service-bus/zipball/c239acfd43cf8eec577e30ce0aa7da86d87b6191",
+                "reference": "c239acfd43cf8eec577e30ce0aa7da86d87b6191",
                 "shasum": ""
             },
             "require": {
@@ -1001,7 +1001,7 @@
                 "phpspec/prophecy": "^1.7",
                 "phpunit/phpunit": "^6.0",
                 "prooph/bookdown-template": "^0.2.3",
-                "prooph/php-cs-fixer-config": "^0.1.1",
+                "prooph/php-cs-fixer-config": "^0.2.1",
                 "psr/container": "^1.0",
                 "react/promise": "^2.4.1",
                 "sandrokeil/interop-config": "^2.0.1",
@@ -1044,7 +1044,7 @@
                 "messaging",
                 "prooph"
             ],
-            "time": "2017-10-23T14:00:18+00:00"
+            "time": "2017-12-17T09:59:37+00:00"
         },
         {
             "name": "prooph/service-bus-symfony-bundle",
