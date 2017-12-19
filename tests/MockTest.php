@@ -14,10 +14,10 @@ class MockTest extends TestCase
 {
     public function testForceBehaviour()
     {
-        self::pass();
+        self::fail('jodete');
     }
 
-    public static function pass()
+    public static function pass(?string $message = null)
     {
         self::assertTrue(true);
     }

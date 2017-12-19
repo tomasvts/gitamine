@@ -1,6 +1,7 @@
 gitamine:
   plugins:
-    test: ~
+    test:
+      enabled: false
     phplint: ~
     yaml-lint: ~
     phpcs:

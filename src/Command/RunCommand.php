@@ -40,9 +40,12 @@ class RunCommand extends ContainerAwareCommand
         $plugins = $queryBus->dispatch(new GetConfiguratedPluginsQuery());
 
         foreach ($plugins as $plugin) {
+            $output->write("Executing <info>$plugin</info>: ");
             try {
                 $queryBus->dispatch(new RunPluginCommand($plugin));
+                $output->writeln('[<info>OK</info>]');
             } catch (PluginExecutionFailedException $e) {
+                $output->writeln('[<error>FAIL</error>]');
                 return $e->getCode();
             }
         }

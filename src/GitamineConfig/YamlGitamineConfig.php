@@ -57,7 +57,7 @@ class YamlGitamineConfig implements GitamineConfig
     {
         $status = 0;
 
-        system($this->getPluginExecutableFile($plugin)->file(), $status);
+        system($this->getPluginExecutableFile($plugin)->file() . ' > /dev/null', $status);
 
         // ~/.gitamine/plugins/phpunit/run
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 FILES="$(gitamine f:c | grep php)"
-LINES="$(echo $FILES | wc -l)"
+LINES="$(echo $FILES | wc -c)"
+
 if [ "$LINES" -gt "1" ]
 then
     bin/phpcs --standard=PSR2 ${FILES}
