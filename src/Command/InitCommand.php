@@ -41,52 +41,8 @@ class InitCommand extends ContainerAwareCommand
 
         system('mkdir ~/.gitamine 2> /dev/null');
         system('mkdir ~/.gitamine/plugins 2> /dev/null');
-
-        // TODO just for easy start configuration purpose
-        $this->createPlugin(
-            'test',
-            'bash',
-            'bin/console files:committed'
-        );
-
-        $this->createPlugin(
-            'phpcs',
-            'bash',
-            '
-                FILES="$(gitamine f:c | grep php)"
-                bin/phpcs --standard=PSR2 $FILES
-            '
-        );
-
-        $this->createPlugin(
-            'phpunit',
-            'bash',
-            'bin/phpunit'
-        );
-
-        $this->createPlugin(
-            'phpunit',
-            'bash',
-            'bin/phpunit'
-        );
-
-        $this->createPlugin(
-            'phplint',
-            'bash',
-            '
-                FILES="$(gitamine f:c | grep php)"
-                bin/phplint $FILES
-            '
-        );
-
-        $this->createPlugin(
-            'yaml-lint',
-            'bash',
-            '
-                FILES="$(gitamine f:c | grep .yaml)"
-                bin/yaml-lint $FILES
-            '
-        );
+        system('rm -Rf ~/.gitamine 2> /dev/null');
+        system("cp -R $dir/public/gitamine ~/.gitamine 2> /dev/null");
 
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 

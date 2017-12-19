@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+FILES="$(gitamine f:c | grep -E "(\.yaml$|\.yml$)")"
+LINES="$(echo ${FILES} | wc -l)"
+if [ "$LINES" -gt "1" ]
+then
+    bin/yaml-lint ${FILES}
+fi
