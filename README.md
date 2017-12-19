@@ -6,6 +6,7 @@ UK: **/ɡɪtˈæ.miːn/**
 ## initial setup
 
 ```
+# ln -s bin/console /usr/local/bin/console
 $ gitamine init
 ```
 
