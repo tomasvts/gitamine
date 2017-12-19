@@ -9,8 +9,8 @@ gitamine:
       # enabled: true
       bin: bin/phpunit
       warning-as-error: true
-    symfony:
-      enabled: false
+    #symfony:
+    #  enabled: false
 
 # plugins contains an array of assoc arrays, 'enabled' is the only option that is used in gitamine, the other options
 # are sent to the plugin (don't know how)
