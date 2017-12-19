@@ -5,6 +5,8 @@ namespace Gitamine\Handler;
 
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Domain\Directory;
+use Gitamine\Exception\InvalidFileException;
+use Gitamine\Exception\InvalidGitamineProjectException;
 use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Query\GetConfiguratedPluginsQuery;
 use Gitamine\Query\GetProjectDirectoryQuery;
@@ -42,15 +44,21 @@ class GetConfiguratedPluginsQueryHandler
      * @param GetConfiguratedPluginsQuery $query
      *
      * @return string[]
+     *
+     * @throws InvalidGitamineProjectException
      */
     public function __invoke(GetConfiguratedPluginsQuery $query): array
     {
-        $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
-        $plugins = $this->gitamine->getPluginList($dir);
-        $list    = [];
+        try {
+            $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
+            $plugins = $this->gitamine->getPluginList($dir);
+            $list    = [];
 
-        foreach ($plugins as $plugin) {
-            $list[] = $plugin->name();
+            foreach ($plugins as $plugin) {
+                $list[] = $plugin->name();
+            }
+        } catch (InvalidFileException $e) {
+            throw new InvalidGitamineProjectException('Invalid gitamine folder', 1, $e);
         }
 
         return $list;
