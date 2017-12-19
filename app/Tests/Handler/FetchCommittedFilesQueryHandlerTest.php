@@ -25,7 +25,7 @@ class FetchCommittedFilesQueryHandlerTest extends TestCase
     public function testShouldFetchAddedFiles()
     {
         $dir = '/';
-
+        
         $repo = \Mockery::mock(SubversionRepository::class);
 
         $repo->shouldReceive('isValidSubversionFolder')

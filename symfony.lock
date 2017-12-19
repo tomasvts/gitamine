@@ -14,6 +14,9 @@
     "myclabs/deep-copy": {
         "version": "1.7.0"
     },
+    "overtrue/phplint": {
+        "version": "1.0.0"
+    },
     "paragonie/random_compat": {
         "version": "v2.0.11"
     },
@@ -199,6 +202,9 @@
     },
     "symfony/polyfill-php72": {
         "version": "v1.6.0"
+    },
+    "symfony/process": {
+        "version": "v4.0.2"
     },
     "symfony/routing": {
         "version": "3.3",

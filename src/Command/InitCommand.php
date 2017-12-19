@@ -39,6 +39,7 @@ class InitCommand extends ContainerAwareCommand
         $dir = __DIR__ . '/../..';
         system("echo 'gitamine run' > $dir/.git/hooks/pre-commit");
 
+        // TODO just for easy start configuration purpose
         system('mkdir ~/.gitamine');
         system('mkdir ~/.gitamine/plugins');
         system('mkdir ~/.gitamine/plugins/test');
@@ -71,6 +72,15 @@ class InitCommand extends ContainerAwareCommand
         system("echo 'bin/phpunit' >> ~/.gitamine/plugins/symfony/run");
         system('chmod +x ~/.gitamine/plugins/symfony/run');
         system('chmod 755 ~/.gitamine/plugins/symfony/run');
+
+        system('mkdir ~/.gitamine');
+        system('mkdir ~/.gitamine/plugins');
+        system('mkdir ~/.gitamine/plugins/phplint');
+        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/phplint/run");
+        system("echo 'FILES=\"$(gitamine f:c | grep php)\"' >> ~/.gitamine/plugins/phplint/run");
+        system("echo 'bin/phplint \$FILES' >> ~/.gitamine/plugins/phplint/run");
+        system('chmod +x ~/.gitamine/plugins/phplint/run');
+        system('chmod 755 ~/.gitamine/plugins/phplint/run');
 
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 
