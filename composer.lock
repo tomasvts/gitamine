@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1bf738cff60e9aa1b8260cbd8d383a7f",
+    "content-hash": "f2cc73b1b774ae80e567057b89729300",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3382,6 +3382,55 @@
                 "test"
             ],
             "time": "2016-01-20T08:20:44+00:00"
+        },
+        {
+            "name": "j13k/yaml-lint",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/j13k/yaml-lint.git",
+                "reference": "0ff6598ac8f00e87a245992b5bb642148e179005"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/j13k/yaml-lint/zipball/0ff6598ac8f00e87a245992b5bb642148e179005",
+                "reference": "0ff6598ac8f00e87a245992b5bb642148e179005",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/yaml": "^2|^3|^4"
+            },
+            "bin": [
+                "bin/yaml-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "J13k\\YamlLint\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Fitzpatrick",
+                    "homepage": "http://github.com/j13k"
+                }
+            ],
+            "description": "A compact command line utility for checking YAML file syntax",
+            "homepage": "https://github.com/j13k/yaml-lint",
+            "keywords": [
+                "cli",
+                "lint",
+                "symfony",
+                "syntax",
+                "utility",
+                "yaml",
+                "yml"
+            ],
+            "time": "2017-12-07T11:54:50+00:00"
         },
         {
             "name": "mockery/mockery",

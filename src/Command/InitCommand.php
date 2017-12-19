@@ -39,51 +39,71 @@ class InitCommand extends ContainerAwareCommand
         $dir = __DIR__ . '/../..';
         system("echo 'gitamine run' > $dir/.git/hooks/pre-commit");
 
+        system('mkdir ~/.gitamine 2> /dev/null');
+        system('mkdir ~/.gitamine/plugins 2> /dev/null');
+
         // TODO just for easy start configuration purpose
-        system('mkdir ~/.gitamine');
-        system('mkdir ~/.gitamine/plugins');
-        system('mkdir ~/.gitamine/plugins/test');
-        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/test/run");
-        system("echo 'echo hello world!' >> ~/.gitamine/plugins/test/run");
-        system('chmod +x ~/.gitamine/plugins/test/run');
-        system('chmod 755 ~/.gitamine/plugins/test/run');
+        $this->createPlugin(
+            'test',
+            'bash',
+            'bin/console files:committed'
+        );
 
-        system('mkdir ~/.gitamine');
-        system('mkdir ~/.gitamine/plugins');
-        system('mkdir ~/.gitamine/plugins/phpcs');
-        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/phpcs/run");
-        system("echo 'FILES=\"$(gitamine f:c | grep php)\"' >> ~/.gitamine/plugins/phpcs/run");
-        system("echo 'bin/phpcs --standard=PSR2 \$FILES' >> ~/.gitamine/plugins/phpcs/run");
-        system('chmod +x ~/.gitamine/plugins/phpcs/run');
-        system('chmod 755 ~/.gitamine/plugins/phpcs/run');
+        $this->createPlugin(
+            'phpcs',
+            'bash',
+            '
+                FILES="$(gitamine f:c | grep php)"
+                bin/phpcs --standard=PSR2 $FILES
+            '
+        );
 
-        system('mkdir ~/.gitamine');
-        system('mkdir ~/.gitamine/plugins');
-        system('mkdir ~/.gitamine/plugins/phpunit');
-        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/phpunit/run");
-        system("echo 'bin/phpunit' >> ~/.gitamine/plugins/phpunit/run");
-        system('chmod +x ~/.gitamine/plugins/phpunit/run');
-        system('chmod 755 ~/.gitamine/plugins/phpunit/run');
+        $this->createPlugin(
+            'phpunit',
+            'bash',
+            'bin/phpunit'
+        );
 
-        system('mkdir ~/.gitamine');
-        system('mkdir ~/.gitamine/plugins');
-        system('mkdir ~/.gitamine/plugins/symfony');
-        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/symfony/run");
-        system("echo 'bin/phpunit' >> ~/.gitamine/plugins/symfony/run");
-        system('chmod +x ~/.gitamine/plugins/symfony/run');
-        system('chmod 755 ~/.gitamine/plugins/symfony/run');
+        $this->createPlugin(
+            'phpunit',
+            'bash',
+            'bin/phpunit'
+        );
 
-        system('mkdir ~/.gitamine');
-        system('mkdir ~/.gitamine/plugins');
-        system('mkdir ~/.gitamine/plugins/phplint');
-        system("echo '#!/usr/bin/env bash' > ~/.gitamine/plugins/phplint/run");
-        system("echo 'FILES=\"$(gitamine f:c | grep php)\"' >> ~/.gitamine/plugins/phplint/run");
-        system("echo 'bin/phplint \$FILES' >> ~/.gitamine/plugins/phplint/run");
-        system('chmod +x ~/.gitamine/plugins/phplint/run');
-        system('chmod 755 ~/.gitamine/plugins/phplint/run');
+        $this->createPlugin(
+            'phplint',
+            'bash',
+            '
+                FILES="$(gitamine f:c | grep php)"
+                bin/phplint $FILES
+            '
+        );
+
+        $this->createPlugin(
+            'yaml-lint',
+            'bash',
+            '
+                FILES="$(gitamine f:c | grep .yaml)"
+                bin/yaml-lint $FILES
+            '
+        );
 
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 
         return 1;
+    }
+
+    /**
+     * @param string $plugin
+     * @param string $type
+     * @param string $code
+     */
+    private function createPlugin(string $plugin, string $type, string $code)
+    {
+        system("mkdir ~/.gitamine/plugins/$plugin 2> /dev/null");
+        system("echo '#!/usr/bin/env $type' > ~/.gitamine/plugins/$plugin/run");
+        system("echo '$code' >> ~/.gitamine/plugins/$plugin/run");
+        system("chmod +x ~/.gitamine/plugins/$plugin/run");
+        system("chmod 755 ~/.gitamine/plugins/$plugin/run");
     }
 }
