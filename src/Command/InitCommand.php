@@ -38,6 +38,7 @@ class InitCommand extends ContainerAwareCommand
     {
         $dir = __DIR__ . '/../..';
         system("echo 'gitamine run' > $dir/.git/hooks/pre-commit");
+        system("chmod +x $dir/.git/hooks/pre-commit");
 
         system('mkdir ~/.gitamine 2> /dev/null');
         system('mkdir ~/.gitamine/plugins 2> /dev/null');
