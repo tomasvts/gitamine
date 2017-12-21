@@ -4,5 +4,5 @@ FILES="$(gitamine f:c | grep php)"
 LINES="$(echo $FILES | wc -c)"
 if [ "$LINES" -gt "1" ]
 then
-    bin/phplint ${FILES} 2> /dev/null
+    bin/phplint --no-cache ${FILES} 2> /dev/null
 fi
