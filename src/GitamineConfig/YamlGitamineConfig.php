@@ -50,16 +50,18 @@ class YamlGitamineConfig implements GitamineConfig
     /**
      * @param Plugin        $plugin
      * @param PluginOptions $pluginOptions
+     * @param null|string   $output
      *
      * @return bool
      */
-    public function runPlugin(Plugin $plugin, PluginOptions $pluginOptions): bool
+    public function runPlugin(Plugin $plugin, PluginOptions $pluginOptions, ?string &$output = null): bool
     {
         $status = 0;
+        $out    = [];
 
-        system($this->getPluginExecutableFile($plugin)->file() . ' > /dev/null', $status);
 
-        // ~/.gitamine/plugins/phpunit/run
+        exec($this->getPluginExecutableFile($plugin)->file(), $out, $status);
+        $output = implode(PHP_EOL, $out);
 
         return $status === 0;
     }

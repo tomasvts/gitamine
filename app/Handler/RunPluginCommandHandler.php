@@ -8,8 +8,11 @@ use Gitamine\Command\RunPluginCommand;
 use Gitamine\Domain\Directory;
 use Gitamine\Domain\Plugin;
 use Gitamine\Exception\PluginExecutionFailedException;
+use Gitamine\Exception\PluginNotInstalledException;
 use Gitamine\Infrastructure\GitamineConfig;
+use Gitamine\Infrastructure\Output;
 use Gitamine\Query\GetProjectDirectoryQuery;
+use Prooph\ServiceBus\Exception\RuntimeException;
 
 /**
  * Class RunPluginCommandHandler
@@ -29,15 +32,22 @@ class RunPluginCommandHandler
     private $gitamine;
 
     /**
+     * @var Output
+     */
+    private $output;
+
+    /**
      * RunPluginCommandHandler constructor.
      *
      * @param SynchronousQueryBus $bus
      * @param GitamineConfig      $gitamine
+     * @param Output              $output
      */
-    public function __construct(SynchronousQueryBus $bus, GitamineConfig $gitamine)
+    public function __construct(SynchronousQueryBus $bus, GitamineConfig $gitamine, Output $output)
     {
         $this->bus      = $bus;
         $this->gitamine = $gitamine;
+        $this->output   = $output;
     }
 
     /**
@@ -50,13 +60,19 @@ class RunPluginCommandHandler
         $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
         $plugin  = new Plugin($query->getPlugin());
         $options = $this->gitamine->getOptionsForPlugin($dir, $plugin);
+        $result  = '';
 
         if ($options->enabled()) {
-            $success = $this->gitamine->runPlugin($plugin, $options);
+            $this->output->print(str_pad("<info>Running</info> {$plugin->name()}:", 36));
+            $success = $this->gitamine->runPlugin($plugin, $options, $result);
 
             if (!$success) {
+                $this->output->println("\t<fail>FAIL</fail>");
+                $this->output->println($result);
                 throw new PluginExecutionFailedException('Failed', 2);
             }
+
+            $this->output->println("\t<success>OK</success>");
         }
     }
 }

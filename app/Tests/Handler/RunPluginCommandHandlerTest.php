@@ -8,9 +8,11 @@ use Gitamine\Command\RunPluginCommand;
 use Gitamine\Domain\Directory;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
+use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Exception\PluginExecutionFailedException;
 use Gitamine\Handler\RunPluginCommandHandler;
 use Gitamine\Infrastructure\GitamineConfig;
+use Gitamine\Infrastructure\Output;
 use Gitamine\Query\GetProjectDirectoryQuery;
 use Hamcrest\Matchers;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +33,7 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $bus      = \Mockery::mock(SynchronousQueryBus::class);
         $gitamine = \Mockery::mock(GitamineConfig::class);
+        $output   = \Mockery::spy(Output::class);
 
         $bus->shouldReceive('dispatch')
             ->once()
@@ -44,10 +47,10 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('runPlugin')
                  ->once()
-                 ->with(Matchers::equalTo(new Plugin('test')), Matchers::anInstanceOf(PluginOptions::class))
+                 ->with(Matchers::equalTo(new Plugin('test')), Matchers::anInstanceOf(PluginOptions::class), null)
                  ->andReturn(true);
 
-        $handler = new RunPluginCommandHandler($bus, $gitamine);
+        $handler = new RunPluginCommandHandler($bus, $gitamine, $output);
         $handler(new RunPluginCommand('test'));
 
         self::assertTrue(true);
@@ -56,7 +59,7 @@ class RunPluginCommandHandlerTest extends TestCase
     /**
      * @throws PluginExecutionFailedException
      */
-    public function testShouldThrowInvalidSubversionDirectoryException()
+    public function testShouldThrowPluginExecutionFailedException()
     {
         $this->expectException(PluginExecutionFailedException::class);
 
@@ -64,6 +67,7 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $bus      = \Mockery::mock(SynchronousQueryBus::class);
         $gitamine = \Mockery::mock(GitamineConfig::class);
+        $output   = \Mockery::spy(Output::class);
 
         $bus->shouldReceive('dispatch')
             ->once()
@@ -77,10 +81,10 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('runPlugin')
                  ->once()
-                 ->with(Matchers::equalTo(new Plugin('test')), Matchers::anInstanceOf(PluginOptions::class))
+                 ->with(Matchers::equalTo(new Plugin('test')), Matchers::anInstanceOf(PluginOptions::class), null)
                  ->andReturn(false);
 
-        $handler = new RunPluginCommandHandler($bus, $gitamine);
+        $handler = new RunPluginCommandHandler($bus, $gitamine, $output);
         $handler(new RunPluginCommand('test'));
     }
 }

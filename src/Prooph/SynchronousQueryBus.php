@@ -136,4 +136,20 @@ class SynchronousQueryBus extends MessageBus implements NamedMessageBus
 
         return $actionEvent->getParam(self::EVENT_PARAM_RESULT);
     }
+
+    /**
+     * @return string
+     */
+    public function busType(): string
+    {
+        return 'synchronous-bus';
+    }
+
+    /**
+     * @return string
+     */
+    public function busName(): string
+    {
+        return 'synchronous-bus';
+    }
 }

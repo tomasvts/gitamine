@@ -21,3 +21,5 @@ services:
         class: App\SubversionRepository\GitRepository
     gitamine.config:
         class: App\GitamineConfig\YamlGitamineConfig
+    output:
+        class: App\Output\ConsoleOutput
