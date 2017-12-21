@@ -15,6 +15,7 @@ use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Infrastructure\Output;
 use Gitamine\Query\GetProjectDirectoryQuery;
 use Hamcrest\Matchers;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,9 +32,9 @@ class RunPluginCommandHandlerTest extends TestCase
     {
         $dir = '/';
 
-        $bus      = \Mockery::mock(SynchronousQueryBus::class);
-        $gitamine = \Mockery::mock(GitamineConfig::class);
-        $output   = \Mockery::spy(Output::class);
+        $bus      = Mockery::mock(SynchronousQueryBus::class);
+        $gitamine = Mockery::mock(GitamineConfig::class);
+        $output   = Mockery::spy(Output::class);
 
         $bus->shouldReceive('dispatch')
             ->once()
@@ -65,9 +66,9 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $dir = '/';
 
-        $bus      = \Mockery::mock(SynchronousQueryBus::class);
-        $gitamine = \Mockery::mock(GitamineConfig::class);
-        $output   = \Mockery::spy(Output::class);
+        $bus      = Mockery::mock(SynchronousQueryBus::class);
+        $gitamine = Mockery::mock(GitamineConfig::class);
+        $output   = Mockery::spy(Output::class);
 
         $bus->shouldReceive('dispatch')
             ->once()

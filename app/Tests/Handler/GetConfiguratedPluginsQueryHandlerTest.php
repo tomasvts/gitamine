@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class GetConfiguratedPluginsQueryHandlerTest extends TestCase
 {
     /**
-     * @throws InvalidSubversionDirectoryException
+     * @throws \Gitamine\Exception\InvalidGitamineProjectException
      */
     public function testGetConfiguratedPlugins()
     {
