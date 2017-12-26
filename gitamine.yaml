@@ -8,7 +8,7 @@ gitamine:
     phpunit:
       bin: bin/phpunit
       enabled: true
-      min-coverage: 10
+      min-coverage: 100
     #symfony: ~
 
 # plugins contains an array of assoc arrays, 'enabled' is the only option that is used in gitamine, the other options

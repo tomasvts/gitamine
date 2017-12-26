@@ -20,10 +20,10 @@ class ConsoleOutput implements Output
     {
         $this->output = new SymfonyConsoleOutput();
 
-        $style = new OutputFormatterStyle('green', null, ['bold', 'blink']);
+        $style = new OutputFormatterStyle('green', null, ['bold']);
         $this->output->getFormatter()->setStyle('success', $style);
 
-        $style = new OutputFormatterStyle('red', null, ['bold', 'blink']);
+        $style = new OutputFormatterStyle('red', null, ['bold']);
         $this->output->getFormatter()->setStyle('fail', $style);
     }
 
