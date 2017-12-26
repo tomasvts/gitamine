@@ -1,2 +1,54 @@
 #!/usr/bin/env bash
-bin/phpunit
+#bin/console files:committed
+
+BIN=phpunit;
+MIN_COVERAGE=0
+ENABLED=1
+
+# The reading options part
+while [[ $# -gt 0 ]] && [[ ."$1" = .--* ]] ;
+do
+    opt="$1";
+    shift;              #expose next argument
+    case "$opt" in
+        "--" ) break 2;;
+        "--bin="* )
+           BIN="${opt#*=}";;
+        "--enabled="* )
+           ENABLED="${opt#*=}";;
+        "--min-coverage="* )
+           MIN_COVERAGE="${opt#*=}";;
+        *) echo >&2 "Invalid option: $@"; exit 1;;
+   esac
+done
+
+
+# The fun part
+command="$BIN"
+
+if [ "$MIN_COVERAGE" -gt "0" ]; then
+    command="$command --coverage-text=cov"
+fi
+
+if eval "${command}"; then
+    echo ''
+else
+    rm cov
+    exit 1
+fi
+
+if [ "$MIN_COVERAGE" -gt "0" ]; then
+    result=$(cat cov | head -n 9 | tail -n 1 )
+    arr=(${result})
+    result=${arr[1]}
+    result=$(echo "$result" | cut -d '.' -f 1)
+
+    rm cov;
+
+    if [ "$result" -lt "$MIN_COVERAGE" ]; then
+        printf "\033[41m\033[30m Coverage is below $MIN_COVERAGE \033[0m"
+        exit 1
+    fi
+fi
+
+exit 0

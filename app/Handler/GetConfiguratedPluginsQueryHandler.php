@@ -44,21 +44,15 @@ class GetConfiguratedPluginsQueryHandler
      * @param GetConfiguratedPluginsQuery $query
      *
      * @return string[]
-     *
-     * @throws InvalidGitamineProjectException
      */
     public function __invoke(GetConfiguratedPluginsQuery $query): array
     {
-        try {
-            $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
-            $plugins = $this->gitamine->getPluginList($dir);
-            $list    = [];
+        $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
+        $plugins = $this->gitamine->getPluginList($dir);
+        $list    = [];
 
-            foreach ($plugins as $plugin) {
-                $list[] = $plugin->name();
-            }
-        } catch (InvalidFileException $e) {
-            throw new InvalidGitamineProjectException('Invalid gitamine folder', 1, $e);
+        foreach ($plugins as $plugin) {
+            $list[] = $plugin->name();
         }
 
         return $list;

@@ -6,6 +6,7 @@ namespace Gitamine\Tests\Handler;
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Domain\Directory;
 use Gitamine\Domain\Plugin;
+use Gitamine\Exception\InvalidGitamineProjectException;
 use Gitamine\Handler\GetConfiguratedPluginsQueryHandler;
 use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Query\GetConfiguratedPluginsQuery;
@@ -21,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class GetConfiguratedPluginsQueryHandlerTest extends TestCase
 {
     /**
-     * @throws \Gitamine\Exception\InvalidGitamineProjectException
+     * @throws InvalidGitamineProjectException
      */
     public function testGetConfiguratedPlugins()
     {
