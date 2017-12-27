@@ -5,6 +5,7 @@ UK: **/ɡɪtˈæ.miːn/**
 
 ## requirements
 
+* Linux/Mac
 * php7.1
 * php curl
 * php zip
