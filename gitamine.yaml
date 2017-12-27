@@ -5,6 +5,7 @@ gitamine:
     yaml-lint: ~
     phpcs:
       enabled: true
+      cbf: true
     phpunit:
       bin: bin/phpunit
       enabled: true

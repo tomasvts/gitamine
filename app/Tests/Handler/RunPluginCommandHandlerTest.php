@@ -44,11 +44,11 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('getOptionsForPlugin')
                  ->once()
-                 ->with(
-                     Matchers::anInstanceOf(Directory::class),
-                     Matchers::equalTo(new Plugin('test')),
-                     Matchers::equalTo(new Event(Event::PRE_COMMIT))
-                 )
+                ->with(
+                    Matchers::anInstanceOf(Directory::class),
+                    Matchers::equalTo(new Plugin('test')),
+                    Matchers::equalTo(new Event(Event::PRE_COMMIT))
+                )
                  ->andReturn(new PluginOptions([]));
 
         $gitamine->shouldReceive('runPlugin')
@@ -82,11 +82,11 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('getOptionsForPlugin')
                  ->once()
-                 ->with(
-                     Matchers::anInstanceOf(Directory::class),
-                     Matchers::equalTo(new Plugin('test')),
-                     Matchers::equalTo(new Event('pre-commit'))
-                 )
+                ->with(
+                    Matchers::anInstanceOf(Directory::class),
+                    Matchers::equalTo(new Plugin('test')),
+                    Matchers::equalTo(new Event('pre-commit'))
+                )
                  ->andReturn(new PluginOptions([]));
 
         $gitamine->shouldReceive('runPlugin')
