@@ -15,9 +15,9 @@ use Gitamine\Infrastructure\SubversionRepository;
 class GitRepository implements SubversionRepository
 {
     private const GIT_ROOT     = 'git rev-parse --show-toplevel';
-    private const GIT_ADDED    = 'git diff-index --cached --name-status HEAD | egrep \'^(A)\' | awk \'{print $2;}\'';
-    private const GIT_MODIFIED = 'git diff-index --cached --name-status HEAD | egrep \'^(M)\' | awk \'{print $2;}\'';
-    private const GIT_DELETED  = 'git diff-index --cached --name-status HEAD | egrep \'^(D)\' | awk \'{print $2;}\'';
+    private const GIT_ADDED    = 'git diff --cached --name-status | awk \'$1 == "A" { print $2 }\'';
+    private const GIT_MODIFIED = 'git diff --cached --name-status | awk \'$1 == "M" { print $2 }\'';
+    private const GIT_DELETED  = 'git diff --cached --name-status | awk \'$1 == "D" { print $2 }\'';
 
     /**
      * @param Directory $dir
