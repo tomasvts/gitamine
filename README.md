@@ -3,6 +3,13 @@
 US: **/ɡɪtəˈ.miː.n/** \
 UK: **/ɡɪtˈæ.miːn/**
 
+## requirements
+
+* php7.1
+* php curl
+* php zip
+* Git
+
 ## initial setup
 
 ```
