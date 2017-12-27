@@ -70,12 +70,12 @@ class RunPluginCommandHandler
             $success = $this->gitamine->runPlugin($plugin, $options, $result);
 
             if (!$success) {
-                $this->output->println("\t<fail>FAIL</fail>");
+                $this->output->println("\t<fail>✘</fail>");
                 $this->output->println($result);
                 throw new PluginExecutionFailedException('Failed', 2);
             }
 
-            $this->output->println("\t<success>OK</success>");
+            $this->output->println("\t<success>✔</success>");
         }
     }
 }
