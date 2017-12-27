@@ -1,4 +1,5 @@
 gitamine:
+
   pre-commit:
     #test: ~
     phplint: ~
@@ -10,8 +11,10 @@ gitamine:
       bin: bin/phpunit
       enabled: true
       min-coverage: 0
+
   pre-push:
-    codeception: ~
+    codeception:
+      enabled: false
 
 # plugins contains an array of assoc arrays, 'enabled' is the only option that is used in gitamine, the other options
 # are sent to the plugin (don't know how)
