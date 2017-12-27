@@ -12,7 +12,7 @@ UK: **/ɡɪtˈæ.miːn/**
 
 ## initial setup
 
-```
+```bash
 # ln -s bin/console /usr/local/bin/console
 $ gitamine init
 ```
