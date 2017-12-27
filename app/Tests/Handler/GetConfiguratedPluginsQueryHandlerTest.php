@@ -5,8 +5,8 @@ namespace Gitamine\Tests\Handler;
 
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Domain\Directory;
+use Gitamine\Domain\Event;
 use Gitamine\Domain\Plugin;
-use Gitamine\Exception\InvalidGitamineProjectException;
 use Gitamine\Handler\GetConfiguratedPluginsQueryHandler;
 use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Query\GetConfiguratedPluginsQuery;
@@ -21,9 +21,6 @@ use PHPUnit\Framework\TestCase;
  */
 class GetConfiguratedPluginsQueryHandlerTest extends TestCase
 {
-    /**
-     * @throws InvalidGitamineProjectException
-     */
     public function testGetConfiguratedPlugins()
     {
         $dir = '/';
@@ -38,14 +35,14 @@ class GetConfiguratedPluginsQueryHandlerTest extends TestCase
 
         $gitamine->shouldReceive('getPluginList')
                  ->once()
-                 ->with(Matchers::equalTo(new Directory($dir)))
+                 ->with(Matchers::equalTo(new Directory($dir)), Matchers::equalTo(new Event(Event::PRE_COMMIT)))
                  ->andReturn([new Plugin('phpunit')]);
 
         $handler = new GetConfiguratedPluginsQueryHandler($bus, $gitamine);
 
         self::assertEquals(
             ['phpunit'],
-            $handler(new GetConfiguratedPluginsQuery())
+            $handler(new GetConfiguratedPluginsQuery('pre-commit'))
         );
     }
 }

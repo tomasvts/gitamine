@@ -6,6 +6,7 @@ namespace Gitamine\Tests\Handler;
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Command\RunPluginCommand;
 use Gitamine\Domain\Directory;
+use Gitamine\Domain\Event;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
@@ -43,7 +44,11 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('getOptionsForPlugin')
                  ->once()
-                 ->with(Matchers::anInstanceOf(Directory::class), Matchers::equalTo(new Plugin('test')))
+                 ->with(
+                     Matchers::anInstanceOf(Directory::class),
+                     Matchers::equalTo(new Plugin('test')),
+                     Matchers::equalTo(new Event(Event::PRE_COMMIT))
+                 )
                  ->andReturn(new PluginOptions([]));
 
         $gitamine->shouldReceive('runPlugin')
@@ -52,7 +57,7 @@ class RunPluginCommandHandlerTest extends TestCase
                  ->andReturn(true);
 
         $handler = new RunPluginCommandHandler($bus, $gitamine, $output);
-        $handler(new RunPluginCommand('test'));
+        $handler(new RunPluginCommand('test', 'pre-commit'));
 
         self::assertTrue(true);
     }
@@ -77,7 +82,11 @@ class RunPluginCommandHandlerTest extends TestCase
 
         $gitamine->shouldReceive('getOptionsForPlugin')
                  ->once()
-                 ->with(Matchers::anInstanceOf(Directory::class), Matchers::equalTo(new Plugin('test')))
+                 ->with(
+                     Matchers::anInstanceOf(Directory::class),
+                     Matchers::equalTo(new Plugin('test')),
+                     Matchers::equalTo(new Event('pre-commit'))
+                 )
                  ->andReturn(new PluginOptions([]));
 
         $gitamine->shouldReceive('runPlugin')
@@ -86,6 +95,6 @@ class RunPluginCommandHandlerTest extends TestCase
                  ->andReturn(false);
 
         $handler = new RunPluginCommandHandler($bus, $gitamine, $output);
-        $handler(new RunPluginCommand('test'));
+        $handler(new RunPluginCommand('test', 'pre-commit'));
     }
 }

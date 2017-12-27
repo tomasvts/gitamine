@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\GitamineConfig;
 
 use Gitamine\Domain\Directory;
+use Gitamine\Domain\Event;
 use Gitamine\Domain\File;
 use Gitamine\Domain\Hook;
 use Gitamine\Domain\Plugin;
@@ -73,13 +74,14 @@ class YamlGitamineConfig implements GitamineConfig
 
     /**
      * @param Directory $directory
+     * @param Event     $event
      *
-     * @return array
+     * @return Plugin[]
      */
-    public function getPluginList(Directory $directory): array
+    public function getPluginList(Directory $directory, Event $event): array
     {
         $config            = $this->getConfiguration($directory);
-        $config['plugins'] = $config['plugins'] ?? [];
+        $config['plugins'] = $config[$event->event()] ?? [];
 
         $plugins = [];
 
@@ -93,15 +95,16 @@ class YamlGitamineConfig implements GitamineConfig
     /**
      * @param Directory $directory
      * @param Plugin    $plugin
+     * @param Event     $event
      *
      * @return PluginOptions
      */
-    public function getOptionsForPlugin(Directory $directory, Plugin $plugin): PluginOptions
+    public function getOptionsForPlugin(Directory $directory, Plugin $plugin, Event $event): PluginOptions
     {
         $config            = $this->getConfiguration($directory);
         $config['plugins'] = $config['plugins'] ?? [];
 
-        return new PluginOptions($config['plugins'][$plugin->name()] ?? []);
+        return new PluginOptions($config[$event->event()][$plugin->name()] ?? []);
     }
 
     /**

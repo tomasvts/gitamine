@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Gitamine\Infrastructure;
 
 use Gitamine\Domain\Directory;
+use Gitamine\Domain\Event;
 use Gitamine\Domain\File;
 use Gitamine\Domain\Hook;
 use Gitamine\Domain\Plugin;
@@ -41,18 +42,20 @@ interface GitamineConfig
 
     /**
      * @param Directory $directory
+     * @param Event     $event
      *
      * @return Plugin[]
      */
-    public function getPluginList(Directory $directory): array;
+    public function getPluginList(Directory $directory, Event $event): array;
 
     /**
      * @param Directory $directory
      * @param Plugin    $plugin
+     * @param Event     $event
      *
      * @return PluginOptions
      */
-    public function getOptionsForPlugin(Directory $directory, Plugin $plugin): PluginOptions;
+    public function getOptionsForPlugin(Directory $directory, Plugin $plugin, Event $event): PluginOptions;
 
     /**
      * @return Directory

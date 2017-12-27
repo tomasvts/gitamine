@@ -6,6 +6,7 @@ namespace Gitamine\Handler;
 use App\Prooph\SynchronousQueryBus;
 use Gitamine\Command\RunPluginCommand;
 use Gitamine\Domain\Directory;
+use Gitamine\Domain\Event;
 use Gitamine\Domain\Plugin;
 use Gitamine\Exception\PluginExecutionFailedException;
 use Gitamine\Exception\PluginNotInstalledException;
@@ -58,8 +59,10 @@ class RunPluginCommandHandler
     public function __invoke(RunPluginCommand $query)
     {
         $dir     = new Directory($this->bus->dispatch(new GetProjectDirectoryQuery()));
-        $plugin  = new Plugin($query->getPlugin());
-        $options = $this->gitamine->getOptionsForPlugin($dir, $plugin);
+        $plugin  = new Plugin($query->plugin());
+        $event   = new Event($query->event());
+
+        $options = $this->gitamine->getOptionsForPlugin($dir, $plugin, $event);
         $result  = '';
 
         if ($options->enabled()) {
