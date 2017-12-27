@@ -40,7 +40,8 @@ fi
 
 # Verifying if coverage has succeed
 if [ "$MIN_COVERAGE" -gt "0" ]; then
-    result=$(cat cov | head -n 9 | tail -n 1 )
+    result=$(cat .coverage | head -n 9 | tail -n 1 )
+
     arr=(${result})
     result=${arr[1]}
     result=$(echo "$result" | cut -d '.' -f 1)
