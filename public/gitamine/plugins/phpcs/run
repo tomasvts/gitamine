@@ -5,7 +5,6 @@ LINES=${#FILES}
 
 if [ "$LINES" -gt "1" ]
 then
-    echo bin/phpcbf --standard=PSR2 "${FILES}"
-    echo bin/phpcs --standard=PSR2 "${FILES}"
-    exit 1
+    eval bin/phpcbf --standard=PSR2 "${FILES}"
+    eval bin/phpcs --standard=PSR2 "${FILES}"
 fi

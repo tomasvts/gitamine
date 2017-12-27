@@ -11,11 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class InstallPluginCommand
+ * Class SetupCommand
  *
  * @package App\Command
  */
-class InitCommand extends ContainerAwareCommand
+class SetupCommand extends ContainerAwareCommand
 {
     /**
      * @var SynchronousQueryBus;
@@ -25,7 +25,7 @@ class InitCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('init')
+            ->setName('setup')
             ->setDescription('TODO')
             ->setHelp('TODO');
     }
@@ -41,11 +41,13 @@ class InitCommand extends ContainerAwareCommand
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
         $dir = $this->bus->dispatch(new GetProjectDirectoryQuery());
 
-        // TODO Initialize project hooks or update
-        foreach (Event::VALID_EVENTS as $event) {
-            system("echo 'gitamine run $event' > $dir/.git/hooks/$event");
-            system("chmod +x $dir/.git/hooks/$event");
-        }
+
+        system('mkdir ~/.gitamine 2> /dev/null');
+        system('mkdir ~/.gitamine/plugins 2> /dev/null');
+        system('rm -Rf ~/.gitamine 2> /dev/null');
+        system("cp -R $dir/public/gitamine ~/.gitamine 2> /dev/null");
+
+        $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 
         return 0;
     }
