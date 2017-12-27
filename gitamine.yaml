@@ -2,6 +2,7 @@ gitamine:
 
   pre-commit:
     #test: ~
+    shellcheck: ~
     composer: ~
     phplint: ~
     yaml-lint: ~

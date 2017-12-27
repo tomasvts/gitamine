@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-FILES="$(gitamine f:c | grep php)"
-LINES="$(echo $FILES | wc -c)"
+FILES=$(gitamine f:c | grep "\.php$" | tr '\r\n' ' ')
+LINES=${#FILES}
+
 if [ "$LINES" -gt "1" ]
 then
-    bin/phplint --no-cache ${FILES} 2> /dev/null
+    bin/phplint --no-cache "${FILES}" 2> /dev/null
 fi
