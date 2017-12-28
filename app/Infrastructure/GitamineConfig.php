@@ -6,6 +6,7 @@ namespace Gitamine\Infrastructure;
 use Gitamine\Domain\Directory;
 use Gitamine\Domain\Event;
 use Gitamine\Domain\File;
+use Gitamine\Domain\GithubPlugin;
 use Gitamine\Domain\Hook;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
@@ -80,4 +81,6 @@ interface GitamineConfig
      * @return Directory
      */
     public function getProjectFolder(): Directory;
+
+    public function getGithubPluginName(GithubPlugin $plugin): string;
 }

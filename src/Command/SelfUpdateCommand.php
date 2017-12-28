@@ -23,7 +23,7 @@ class SelfUpdateCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this
-            ->setName('install')
+            ->setName('self-update')
             ->setDescription('updates gitamine')
             ->setHelp('TODO');
     }

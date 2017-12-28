@@ -36,12 +36,12 @@ class GetConfiguratedPluginsQueryHandlerTest extends TestCase
         $gitamine->shouldReceive('getPluginList')
                  ->once()
                  ->with(Matchers::equalTo(new Directory($dir)), Matchers::equalTo(new Event(Event::PRE_COMMIT)))
-                 ->andReturn([new Plugin('phpunit')]);
+                 ->andReturn([new Plugin('test')]);
 
         $handler = new GetConfiguratedPluginsQueryHandler($bus, $gitamine);
 
         self::assertEquals(
-            ['phpunit'],
+            ['test'],
             $handler(new GetConfiguratedPluginsQuery('pre-commit'))
         );
     }

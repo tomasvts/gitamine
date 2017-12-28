@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Prooph\SynchronousQueryBus;
+use Gitamine\Command\InstallPluginCommand as InstallGitaminePluginCommand;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,7 +27,9 @@ class InstallPluginCommand extends ContainerAwareCommand
         $this
             ->setName('install')
             ->setDescription('installs a plugin')
-            ->setHelp('TODO');
+            ->setHelp('TODO')
+            ->addArgument('plugin', InputArgument::REQUIRED)
+            ->addArgument('version', InputArgument::OPTIONAL, 'master');
     }
 
     /**
@@ -36,8 +40,13 @@ class InstallPluginCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 
+        $plugin  = $input->getArgument('plugin');
+        $version = $input->getArgument('version') ?? 'master';
+
+        $this->bus->dispatch(new InstallGitaminePluginCommand($plugin, $version));
         return 1;
     }
 }

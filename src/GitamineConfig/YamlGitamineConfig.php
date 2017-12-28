@@ -6,9 +6,12 @@ namespace App\GitamineConfig;
 use Gitamine\Domain\Directory;
 use Gitamine\Domain\Event;
 use Gitamine\Domain\File;
+use Gitamine\Domain\GithubPlugin;
 use Gitamine\Domain\Hook;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
+use Gitamine\Exception\GithubProjectDoesNotExist;
+use Gitamine\Exception\MissingConfigurationFileException;
 use Gitamine\Infrastructure\GitamineConfig;
 use Symfony\Component\Yaml\Yaml;
 
@@ -154,5 +157,64 @@ class YamlGitamineConfig implements GitamineConfig
     public function getProjectFolder(): Directory
     {
         return new Directory(getcwd());
+    }
+
+    /**
+     * @param GithubPlugin $plugin
+     *
+     * @return string
+     *
+     * @throws GithubProjectDoesNotExist
+     * @throws MissingConfigurationFileException
+     */
+    public function getGithubPluginName(GithubPlugin $plugin): string
+    {
+
+        $ch = curl_init(
+            sprintf(
+                'https://raw.githubusercontent.com/%s/%s/gitamine.json',
+                $plugin->name()->name(),
+                $plugin->version()->version()
+            )
+        );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($httpCode !== 200) {
+            //TODO add ... with version XXX
+            throw new GithubProjectDoesNotExist($plugin->name()->name());
+        }
+
+        $json = json_decode($response);
+
+        if (!$response) {
+            throw new MissingConfigurationFileException();
+        }
+
+        $dir  = $this->getGitamineFolder()->name();
+        $name = $json->name;
+
+        exec(
+            sprintf(
+                'git clone git@github.com:%s.git ~/%s/plugins/%s',
+                $plugin->name()->name(),
+                $dir,
+                $name
+            )
+        );
+
+        exec(
+            sprintf(
+                'cd %s/plugins/%s 2> /dev/null; git checkout %s 2> /dev/null',
+                $dir,
+                $name,
+                $plugin->version()->version()
+            )
+        );
+
+        // DO NOTHING BY NOW
+
+        return '.---.';
     }
 }

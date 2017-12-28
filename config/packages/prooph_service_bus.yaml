@@ -43,14 +43,18 @@ services:
     public: true
     tags:
       - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetConfiguratedPluginsQuery }
-  Gitamine\Handler\RunPluginCommandHandler:
-    arguments: ['@prooph_service_bus.gitamine_query_bus', '@gitamine.config', '@output']
-    public: true
-    tags:
-      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Command\RunPluginCommand }
   Gitamine\Handler\GetProjectDirectoryQueryHandler:
     arguments: ['@gitamine.config']
     public: true
     tags:
       - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Query\GetProjectDirectoryQuery }
-
+  Gitamine\Handler\RunPluginCommandHandler:
+    arguments: ['@prooph_service_bus.gitamine_query_bus', '@gitamine.config', '@output']
+    public: true
+    tags:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Command\RunPluginCommand }
+  Gitamine\Handler\InstallPluginCommandHandler:
+    arguments: ['@gitamine.config', '@output']
+    public: true
+    tags:
+      - { name: 'prooph_service_bus.gitamine_query_bus.route_target', message: Gitamine\Command\InstallPluginCommand }
