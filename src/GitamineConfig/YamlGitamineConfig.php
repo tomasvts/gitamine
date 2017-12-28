@@ -66,7 +66,7 @@ class YamlGitamineConfig implements GitamineConfig
             $params .= sprintf(' --%s=%s', $key, $value);
         }
 
-        exec($this->getPluginExecutableFile($plugin)->file() . $params, $out, $status);
+        exec($this->getPluginExecutableFile($plugin)->file() . $params . ' 2> /dev/null', $out, $status);
         $output = implode(PHP_EOL, $out);
 
         return $status === 0;
