@@ -49,18 +49,4 @@ class InitCommand extends ContainerAwareCommand
 
         return 0;
     }
-
-    /**
-     * @param string $plugin
-     * @param string $type
-     * @param string $code
-     */
-    private function createPlugin(string $plugin, string $type, string $code)
-    {
-        system("mkdir ~/.gitamine/plugins/$plugin 2> /dev/null");
-        system("echo '#!/usr/bin/env $type' > ~/.gitamine/plugins/$plugin/run");
-        system("echo '$code' >> ~/.gitamine/plugins/$plugin/run");
-        system("chmod +x ~/.gitamine/plugins/$plugin/run");
-        system("chmod 755 ~/.gitamine/plugins/$plugin/run");
-    }
 }

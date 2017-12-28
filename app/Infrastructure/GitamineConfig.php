@@ -70,13 +70,6 @@ interface GitamineConfig
     /**
      * @param Plugin $plugin
      *
-     * @return Hook[]
-     */
-    public function getGitaminePluginHooks(Plugin $plugin): array;
-
-    /**
-     * @param Plugin $plugin
-     *
      * @return File
      */
     public function getPluginExecutableFile(Plugin $plugin): File;

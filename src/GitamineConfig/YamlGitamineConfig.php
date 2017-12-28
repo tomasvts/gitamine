@@ -133,17 +133,6 @@ class YamlGitamineConfig implements GitamineConfig
     /**
      * @param Plugin $plugin
      *
-     * @return Hook[]
-     */
-    public function getGitaminePluginHooks(Plugin $plugin): array
-    {
-        // TODO: Implement getGitaminePluginHooks() method.
-        return [];
-    }
-
-    /**
-     * @param Plugin $plugin
-     *
      * @return File
      */
     public function getPluginExecutableFile(Plugin $plugin): File
