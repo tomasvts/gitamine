@@ -31,7 +31,6 @@
         <whitelist>
             <directory>./app/Command/</directory>
             <directory>./app/Domain/</directory>
-            <directory>./app/Exception/</directory>
             <directory>./app/Handler/</directory>
             <directory>./app/Query/</directory>
         </whitelist>

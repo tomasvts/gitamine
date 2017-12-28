@@ -9,7 +9,6 @@ use Gitamine\Domain\Directory;
 use Gitamine\Domain\Event;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
-use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Exception\PluginExecutionFailedException;
 use Gitamine\Handler\RunPluginCommandHandler;
 use Gitamine\Infrastructure\GitamineConfig;

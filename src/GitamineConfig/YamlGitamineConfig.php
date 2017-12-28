@@ -169,7 +169,6 @@ class YamlGitamineConfig implements GitamineConfig
      */
     public function getGithubPluginName(GithubPlugin $plugin): string
     {
-
         $ch = curl_init(
             sprintf(
                 'https://raw.githubusercontent.com/%s/%s/gitamine.json',
@@ -194,6 +193,14 @@ class YamlGitamineConfig implements GitamineConfig
 
         $dir  = $this->getGitamineFolder()->name();
         $name = $json->name;
+
+        exec(
+            sprintf(
+                'rm -Rf ~/%s/plugins/%s > /dev/null',
+                $dir,
+                $name
+            )
+        );
 
         exec(
             sprintf(

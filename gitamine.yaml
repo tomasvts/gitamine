@@ -12,7 +12,7 @@ gitamine:
     phpunit:
       bin: bin/phpunit
       enabled: true
-      min-coverage: 0
+      min-coverage: 100
       #configuration-file: phpunit.unit.xml
 
   pre-push:
