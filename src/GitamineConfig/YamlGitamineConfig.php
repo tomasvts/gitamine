@@ -7,7 +7,6 @@ use Gitamine\Domain\Directory;
 use Gitamine\Domain\Event;
 use Gitamine\Domain\File;
 use Gitamine\Domain\GithubPlugin;
-use Gitamine\Domain\Hook;
 use Gitamine\Domain\Plugin;
 use Gitamine\Domain\PluginOptions;
 use Gitamine\Exception\GithubProjectDoesNotExist;
