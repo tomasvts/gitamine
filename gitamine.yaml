@@ -7,6 +7,8 @@ gitamine:
     phplint: ~
     yaml-lint: ~
     phpcs:
+      interactive: false
+      standard: PSR2
       enabled: true
       cbf: true
     phpunit:

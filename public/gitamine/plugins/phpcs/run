@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-FILES=$(gitamine f:c | grep "\.php$" | tr '\r\n' ' ')
+FILES=$(gitamine f:c | grep "\\.php$" | tr '\r\n' ' ')
 LINES=${#FILES}
 
 if [ "$LINES" -gt "1" ]
 then
     eval bin/phpcbf --standard=PSR2 "${FILES}"
-    eval bin/phpcs --standard=PSR2 "${FILES}"
+    eval bin/phpcs --colors -p --standard=PSR2 "${FILES}"
 fi
