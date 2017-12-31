@@ -69,12 +69,10 @@ class RunPluginCommandHandler
             $this->output->println('<pending> ◷</pending>');
 
             $success = $this->gitamine->runPlugin($plugin, $event, $options, $result);
-            $nextRow = $this->output->getCurrentLine();
-            $nextCol = $this->output->getCurrentColumn();
+            //$nextRow = $this->output->getCurrentLine();
+            //$nextCol = $this->output->getCurrentColumn();
 
             if (!$success) {
-                $this->output->moveTo($row, 0);
-                $this->output->clearLine();
                 $this->output->moveTo($row, 0);
 
                 $this->output->println(
@@ -82,13 +80,12 @@ class RunPluginCommandHandler
                     "\t<fail>✘</fail>"
                 );
 
-                $this->output->moveTo($nextRow, $nextCol);
+                $this->output->println($result);
+                //$this->output->moveTo($nextRow, $nextCol);
 
                 throw new PluginExecutionFailedException('Failed', 2);
             }
 
-            $this->output->moveTo($row, 0);
-            $this->output->clearLine();
             $this->output->moveTo($row, 0);
 
             $this->output->println(

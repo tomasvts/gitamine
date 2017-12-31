@@ -72,7 +72,8 @@ class ConsoleOutput implements Output
         ';
 
         $line = shell_exec($command);
-        return (int) $line;
+
+        return (int)$line;
     }
 
     /**
@@ -93,7 +94,8 @@ class ConsoleOutput implements Output
         ';
 
         $col = shell_exec($command);
-        return (int) $col;
+
+        return (int)$col;
     }
 
     /**
@@ -102,6 +104,18 @@ class ConsoleOutput implements Output
      */
     public function moveTo(int $row, int $col): void
     {
+        $current = $this->getCurrentColumn();
+        $min     = $row;
+        $max     = $current;
+
+        if ($current < $row) {
+            $min = $current;
+            $max = $row;
+        }
+
+        for ($i = $min; $i <= $max; $i++) {
+            system(sprintf('tput cup %d %d', $i, $col));
+        }
         system(sprintf('tput cup %d %d', $row, $col));
     }
 
