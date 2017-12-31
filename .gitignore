@@ -1,6 +1,7 @@
 /.idea
 /build
 .phplint-cache
+.DS_Store
 
 ###> symfony/framework-bundle ###
 .env
