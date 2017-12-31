@@ -57,11 +57,11 @@ class GitamineMock
     {
         $this->gitamine->shouldReceive('getOptionsForPlugin')
                        ->once()
-                       ->with(
-                           Matchers::anInstanceOf(Directory::class),
-                           Matchers::equalTo(new Plugin($plugin)),
-                           Matchers::equalTo(new Event($event))
-                       )
+                    ->with(
+                        Matchers::anInstanceOf(Directory::class),
+                        Matchers::equalTo(new Plugin($plugin)),
+                        Matchers::equalTo(new Event($event))
+                    )
                        ->andReturn(new PluginOptions($options));
     }
 
@@ -74,11 +74,12 @@ class GitamineMock
     {
         $this->gitamine->shouldReceive('runPlugin')
                        ->once()
-                       ->with(Matchers::equalTo(new Plugin($plugin)),
-                           Matchers::equalTo(new Event($event)),
-                           Matchers::anInstanceOf(PluginOptions::class),
-                           null
-                       )
+                    ->with(
+                        Matchers::equalTo(new Plugin($plugin)),
+                        Matchers::equalTo(new Event($event)),
+                        Matchers::anInstanceOf(PluginOptions::class),
+                        null
+                    )
                        ->andReturn($return);
     }
 
@@ -143,10 +144,10 @@ class GitamineMock
     {
         $this->gitamine->shouldReceive('getGithubPluginName')
                        ->once()
-                       ->with(Matchers::equalTo(new GithubPlugin(
-                           new GithubPluginName($name),
-                           new GithubPluginVersion($version)
-                       )))
+                    ->with(Matchers::equalTo(new GithubPlugin(
+                        new GithubPluginName($name),
+                        new GithubPluginVersion($version)
+                    )))
                        ->andReturn($return);
     }
 }

@@ -19,10 +19,3 @@ gitamine:
       bin: bin/phpunit
       min-coverage: 100
       #TODO configuration-file: phpunit.unit.xml
-
-  pre-push:
-    codeception:
-      enabled: false
-    phpunit:
-      enabled: true
-      min-coverage: 100
