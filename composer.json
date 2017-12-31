@@ -49,7 +49,7 @@
     "symfony/symfony": "*"
   },
   "bin": [
-    "bin/gitamine"
+    "gitamine"
   ],
   "extra": {
     "symfony": {
