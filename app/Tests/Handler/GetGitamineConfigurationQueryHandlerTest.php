@@ -3,14 +3,12 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use Gitamine\Domain\Directory;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Handler\GetGitamineConfigurationQueryHandler;
-use Gitamine\Infrastructure\GitamineConfig;
-use Gitamine\Infrastructure\SubversionRepository;
 use Gitamine\Query\GetGitamineConfigurationQuery;
-use Hamcrest\Matchers;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\GitamineMock;
+use Gitamine\Test\VersionControlMock;
 
 /**
  * Class GetConfiguratedPluginsQueryHandlerTest
@@ -24,32 +22,18 @@ class GetGitamineConfigurationQueryHandlerTest extends TestCase
      */
     public function testGetConfiguratedPlugins()
     {
-        $dir = '/';
+        $dir      = '/';
+        $git      = VersionControlMock::create();
+        $gitamine = GitamineMock::create();
 
-        $repository = \Mockery::mock(SubversionRepository::class);
-        $gitamine   = \Mockery::mock(GitamineConfig::class);
+        $git->shouldBeValidVersionControlFolder($dir, true);
+        $git->shouldGetRootDir($dir, $dir);
 
-        $repository->shouldReceive('isValidSubversionFolder')
-                   ->once()
-                   ->with(Matchers::equalTo(new Directory($dir)))
-                   ->andReturn(true);
+        $gitamine->shouldGetConfiguration($dir, []);
 
-        $repository->shouldReceive('getRootDir')
-                   ->once()
-                   ->with(Matchers::equalTo(new Directory($dir)))
-                   ->andReturn(new Directory($dir));
+        $handler = new GetGitamineConfigurationQueryHandler($git->versionControl(), $gitamine->gitamine());
 
-        $gitamine->shouldReceive('getConfiguration')
-                 ->once()
-                 ->with(Matchers::equalTo(new Directory($dir)))
-                 ->andReturn([]);
-
-        $handler = new GetGitamineConfigurationQueryHandler($repository, $gitamine);
-
-        self::assertEquals(
-            [],
-            $handler(new GetGitamineConfigurationQuery($dir))
-        );
+        self::assertEquals([], $handler(new GetGitamineConfigurationQuery($dir)));
     }
 
     /**
@@ -59,17 +43,13 @@ class GetGitamineConfigurationQueryHandlerTest extends TestCase
     {
         $this->expectException(InvalidSubversionDirectoryException::class);
 
-        $repository = \Mockery::mock(SubversionRepository::class);
-        $gitamine   = \Mockery::mock(GitamineConfig::class);
+        $dir      = '/';
+        $git      = VersionControlMock::create();
+        $gitamine = GitamineMock::create();
 
-        $dir = '/';
+        $git->shouldBeValidVersionControlFolder($dir, false);
 
-        $repository->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(false);
-
-        $handler = new GetGitamineConfigurationQueryHandler($repository, $gitamine);
+        $handler = new GetGitamineConfigurationQueryHandler($git->versionControl(), $gitamine->gitamine());
         $handler(new GetGitamineConfigurationQuery($dir));
     }
 }

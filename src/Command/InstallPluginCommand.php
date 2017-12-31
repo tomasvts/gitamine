@@ -42,13 +42,13 @@ class InstallPluginCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $this->bus = $this->getContainer()->get('prooph_service_bus.gitamine_query_bus');
 
         $plugin  = $input->getArgument('plugin');
         $version = $input->getArgument('version') ?? 'master';
 
         $this->bus->dispatch(new InstallGitaminePluginCommand($plugin, $version));
-        return 1;
+
+        return 0;
     }
 }

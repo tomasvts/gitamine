@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use Gitamine\Domain\Directory;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Handler\FetchCommittedFilesQueryHandler;
-use Gitamine\Infrastructure\SubversionRepository;
 use Gitamine\Query\FetchCommittedFilesQuery;
-use Hamcrest\Matchers;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\VersionControlMock;
 
 /**
  * Class FetchCommittedFilesQueryHandlerTest
@@ -24,30 +22,15 @@ class FetchCommittedFilesQueryHandlerTest extends TestCase
      */
     public function testShouldFetchAddedFiles()
     {
-        $dir = '/';
-        
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $dir  = '/';
+        $repo = VersionControlMock::create();
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(true);
+        $repo->shouldBeValidVersionControlFolder($dir, true);
 
-        $repo->shouldReceive('getNewFiles')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn([
-                 '/added.txt'
-             ]);
+        $repo->shouldGetNewFiles($dir, ['/added.txt']);
+        $repo->shouldGetModifiedFiles($dir, ['/modified.txt']);
 
-        $repo->shouldReceive('getUpdatedFiles')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn([
-                 '/modified.txt'
-             ]);
-
-        $handler = new FetchCommittedFilesQueryHandler($repo);
+        $handler = new FetchCommittedFilesQueryHandler($repo->versionControl());
         self::assertEquals(
             ['/added.txt', '/modified.txt'],
             $handler(new FetchCommittedFilesQuery($dir))
@@ -61,19 +44,12 @@ class FetchCommittedFilesQueryHandlerTest extends TestCase
     {
         $this->expectException(InvalidSubversionDirectoryException::class);
 
-        $dir = '/';
+        $dir  = '/';
+        $repo = VersionControlMock::create();
 
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $repo->shouldBeValidVersionControlFolder($dir, false);
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(false);
-
-        $handler = new FetchCommittedFilesQueryHandler($repo);
-        self::assertEquals(
-            ['/test.txt'],
-            $handler(new FetchCommittedFilesQuery($dir))
-        );
+        $handler = new FetchCommittedFilesQueryHandler($repo->versionControl());
+        $handler(new FetchCommittedFilesQuery($dir));
     }
 }

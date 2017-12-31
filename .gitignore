@@ -2,16 +2,13 @@
 /build
 .phplint-cache
 .DS_Store
-/bin/*
+/bin
 
 ###> symfony/framework-bundle ###
-.env
-/public/bundles/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> symfony/phpunit-bridge ###
-.phpunit
+###> phpunit/phpunit ###
 /phpunit.xml
-###< symfony/phpunit-bridge ###
+###< phpunit/phpunit ###

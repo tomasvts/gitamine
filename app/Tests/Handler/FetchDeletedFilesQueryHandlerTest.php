@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use Gitamine\Domain\Directory;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Handler\FetchDeletedFilesQueryHandler;
-use Gitamine\Infrastructure\SubversionRepository;
 use Gitamine\Query\FetchDeletedFilesQuery;
-use Hamcrest\Matchers;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\VersionControlMock;
 
 /**
  * Class FetchDeletedFilesQueryHandlerTest
@@ -24,23 +22,13 @@ class FetchDeletedFilesQueryHandlerTest extends TestCase
      */
     public function testShouldFetchAddedFiles()
     {
-        $dir = '/';
+        $dir  = '/';
+        $repo = VersionControlMock::create();
 
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $repo->shouldBeValidVersionControlFolder($dir, true);
+        $repo->shouldGetDeletedFiles($dir, ['/deleted.txt']);
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(true);
-
-        $repo->shouldReceive('getDeletedFiles')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn([
-                 '/deleted.txt'
-             ]);
-
-        $handler = new FetchDeletedFilesQueryHandler($repo);
+        $handler = new FetchDeletedFilesQueryHandler($repo->versionControl());
         self::assertEquals(
             ['/deleted.txt'],
             $handler(new FetchDeletedFilesQuery($dir))
@@ -54,16 +42,12 @@ class FetchDeletedFilesQueryHandlerTest extends TestCase
     {
         $this->expectException(InvalidSubversionDirectoryException::class);
 
-        $dir = '/';
+        $dir  = '/';
+        $repo = VersionControlMock::create();
 
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $repo->shouldBeValidVersionControlFolder($dir, false);
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(false);
-
-        $handler = new FetchDeletedFilesQueryHandler($repo);
+        $handler = new FetchDeletedFilesQueryHandler($repo->versionControl());
         self::assertEquals(
             ['/deleted.txt'],
             $handler(new FetchDeletedFilesQuery($dir))

@@ -52,17 +52,18 @@ class YamlGitamineConfig implements GitamineConfig
 
     /**
      * @param Plugin        $plugin
+     * @param Event         $event
      * @param PluginOptions $pluginOptions
      * @param null|string   $output
      *
      * @return bool
      */
-    public function runPlugin(Plugin $plugin, PluginOptions $pluginOptions, ?string &$output = null): bool
+    public function runPlugin(Plugin $plugin, Event $event, PluginOptions $pluginOptions, ?string &$output = null): bool
     {
         $status = 0;
         $out    = [];
 
-        $params = '';
+        $params = ' --event=' . $event->event();
 
         foreach ($pluginOptions->options() as $key => $value) {
             $params .= sprintf(' --%s=%s', $key, $value);

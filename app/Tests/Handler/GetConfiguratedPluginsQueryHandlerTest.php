@@ -3,16 +3,12 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use App\Prooph\SynchronousQueryBus;
-use Gitamine\Domain\Directory;
-use Gitamine\Domain\Event;
-use Gitamine\Domain\Plugin;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Handler\GetConfiguratedPluginsQueryHandler;
-use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Query\GetConfiguratedPluginsQuery;
 use Gitamine\Query\GetProjectDirectoryQuery;
-use Hamcrest\Matchers;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\GitamineMock;
+use Gitamine\Test\QueryBusMock;
 
 /**
  * Class GetConfiguratedPluginsQueryHandlerTest
@@ -23,22 +19,14 @@ class GetConfiguratedPluginsQueryHandlerTest extends TestCase
 {
     public function testGetConfiguratedPlugins()
     {
-        $dir = '/';
+        $dir      = '/';
+        $bus      = QueryBusMock::create();
+        $gitamine = GitamineMock::create();
 
-        $bus      = \Mockery::mock(SynchronousQueryBus::class);
-        $gitamine = \Mockery::mock(GitamineConfig::class);
+        $bus->shouldDispatch(new GetProjectDirectoryQuery(), $dir);
+        $gitamine->shouldGetPluginList($dir, 'pre-commit', ['test']);
 
-        $bus->shouldReceive('dispatch')
-            ->once()
-            ->with(Matchers::equalTo(new GetProjectDirectoryQuery()))
-            ->andReturn($dir);
-
-        $gitamine->shouldReceive('getPluginList')
-                 ->once()
-                 ->with(Matchers::equalTo(new Directory($dir)), Matchers::equalTo(new Event(Event::PRE_COMMIT)))
-                 ->andReturn([new Plugin('test')]);
-
-        $handler = new GetConfiguratedPluginsQueryHandler($bus, $gitamine);
+        $handler = new GetConfiguratedPluginsQueryHandler($bus->bus(), $gitamine->gitamine());
 
         self::assertEquals(
             ['test'],

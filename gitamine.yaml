@@ -4,14 +4,19 @@ gitamine:
     #test: ~
     shellcheck: ~
     composer: ~
-    yaml-lint: ~
+    yaml-lint:
+      bin: bin/yaml-lint
     phpcs:
+      bin: bin/phpcs
+      phpcbf-bin: bin/phpcbf
       interactive: false
       standard: PSR2
       enabled: true
-      cbf: true
-    phpmd: ~
+      phpcbf: true
+    phpmd:
+      bin: bin/phpmd
     phpunit:
+      bin: bin/phpunit
       min-coverage: 100
       #TODO configuration-file: phpunit.unit.xml
 

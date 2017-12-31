@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use Gitamine\Domain\Directory;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Handler\GetProjectDirectoryQueryHandler;
-use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Query\GetProjectDirectoryQuery;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\GitamineMock;
 
 /**
  * Class GetProjectDirectoryQueryHandlerTest
@@ -22,19 +21,11 @@ class GetProjectDirectoryQueryHandlerTest extends TestCase
     public function testGetGitamineCurrentDirectory(): void
     {
         $dir = '/';
+        $gitamine = GitamineMock::create();
 
-        $gitamine = \Mockery::mock(GitamineConfig::class);
+        $gitamine->shouldGetProjectFolder($dir);
 
-        $gitamine->shouldReceive('getProjectFolder')
-                 ->once()
-                 ->with()
-                 ->andReturn(new Directory($dir));
-
-        $handler = new GetProjectDirectoryQueryHandler($gitamine);
-
-        self::assertEquals(
-            '/',
-            $handler(new GetProjectDirectoryQuery())
-        );
+        $handler = new GetProjectDirectoryQueryHandler($gitamine->gitamine());
+        self::assertEquals($dir, $handler(new GetProjectDirectoryQuery()));
     }
 }

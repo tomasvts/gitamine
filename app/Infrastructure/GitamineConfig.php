@@ -34,12 +34,13 @@ interface GitamineConfig
 
     /**
      * @param Plugin        $plugin
+     * @param Event         $event
      * @param PluginOptions $pluginOptions
      * @param string        $output
      *
      * @return bool
      */
-    public function runPlugin(Plugin $plugin, PluginOptions $pluginOptions, ?string &$output): bool;
+    public function runPlugin(Plugin $plugin, Event $event, PluginOptions $pluginOptions, ?string &$output): bool;
 
     /**
      * @param Directory $directory

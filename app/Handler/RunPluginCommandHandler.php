@@ -67,7 +67,7 @@ class RunPluginCommandHandler
 
         if ($options->enabled()) {
             $this->output->print(str_pad("<info>Running</info> {$plugin->name()}:", 36));
-            $success = $this->gitamine->runPlugin($plugin, $options, $result);
+            $success = $this->gitamine->runPlugin($plugin, $event, $options, $result);
 
             if (!$success) {
                 $this->output->println("\t<fail>✘</fail>");

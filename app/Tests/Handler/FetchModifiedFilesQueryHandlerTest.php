@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Gitamine\Tests\Handler;
 
-use Gitamine\Domain\Directory;
+use Gitamine\Common\Test\TestCase;
 use Gitamine\Exception\InvalidSubversionDirectoryException;
 use Gitamine\Handler\FetchModifiedFilesQueryHandler;
-use Gitamine\Infrastructure\SubversionRepository;
 use Gitamine\Query\FetchModifiedFilesQuery;
-use Hamcrest\Matchers;
-use PHPUnit\Framework\TestCase;
+use Gitamine\Test\VersionControlMock;
 
 /**
  * Class FetchModifiedFilesQueryHandlerTest
@@ -24,23 +22,13 @@ class FetchModifiedFilesQueryHandlerTest extends TestCase
      */
     public function testShouldFetchAddedFiles()
     {
-        $dir = '/';
+        $dir  = '/';
+        $repo = VersionControlMock::create();
 
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $repo->shouldBeValidVersionControlFolder($dir, true);
+        $repo->shouldGetModifiedFiles($dir, ['/modified.txt']);
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(true);
-
-        $repo->shouldReceive('getUpdatedFiles')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn([
-                 '/modified.txt'
-             ]);
-
-        $handler = new FetchModifiedFilesQueryHandler($repo);
+        $handler = new FetchModifiedFilesQueryHandler($repo->versionControl());
         self::assertEquals(
             ['/modified.txt'],
             $handler(new FetchModifiedFilesQuery($dir))
@@ -56,17 +44,11 @@ class FetchModifiedFilesQueryHandlerTest extends TestCase
 
         $dir = '/';
 
-        $repo = \Mockery::mock(SubversionRepository::class);
+        $repo = VersionControlMock::create();
 
-        $repo->shouldReceive('isValidSubversionFolder')
-             ->once()
-             ->with(Matchers::equalTo(new Directory($dir)))
-             ->andReturn(false);
+        $repo->shouldBeValidVersionControlFolder($dir, false);
 
-        $handler = new FetchModifiedFilesQueryHandler($repo);
-        self::assertEquals(
-            ['/test.txt'],
-            $handler(new FetchModifiedFilesQuery($dir))
-        );
+        $handler = new FetchModifiedFilesQueryHandler($repo->versionControl());
+        $handler(new FetchModifiedFilesQuery($dir));
     }
 }
