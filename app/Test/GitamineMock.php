@@ -55,13 +55,12 @@ class GitamineMock
      */
     public function shouldGetOptionsForPlugin(string $plugin, string $event, array $options = []): void
     {
+        $thePlugin    = Matchers::equalTo(new Plugin($plugin));
+        $theEvent     = Matchers::equalTo(new Event($event));
+        $theDirectory = Matchers::anInstanceOf(Directory::class);
         $this->gitamine->shouldReceive('getOptionsForPlugin')
                        ->once()
-                    ->with(
-                        Matchers::anInstanceOf(Directory::class),
-                        Matchers::equalTo(new Plugin($plugin)),
-                        Matchers::equalTo(new Event($event))
-                    )
+                       ->with($theDirectory, $thePlugin, $theEvent)
                        ->andReturn(new PluginOptions($options));
     }
 
@@ -72,14 +71,12 @@ class GitamineMock
      */
     public function shouldRunPlugin(string $plugin, string $event, bool $return): void
     {
+        $thePlugin  = Matchers::equalTo(new Plugin($plugin));
+        $theEvent   = Matchers::equalTo(new Event($event));
+        $theOptions = Matchers::anInstanceOf(PluginOptions::class);
         $this->gitamine->shouldReceive('runPlugin')
                        ->once()
-                    ->with(
-                        Matchers::equalTo(new Plugin($plugin)),
-                        Matchers::equalTo(new Event($event)),
-                        Matchers::anInstanceOf(PluginOptions::class),
-                        null
-                    )
+                       ->with($thePlugin, $theEvent, $theOptions, null)
                        ->andReturn($return);
     }
 
@@ -142,12 +139,13 @@ class GitamineMock
      */
     public function shouldGetPluginName(string $name, string $version, string $return = ''): void
     {
+        $thePlugin = Matchers::equalTo(new GithubPlugin(
+            new GithubPluginName($name),
+            new GithubPluginVersion($version)
+        ));
         $this->gitamine->shouldReceive('getGithubPluginName')
                        ->once()
-                    ->with(Matchers::equalTo(new GithubPlugin(
-                        new GithubPluginName($name),
-                        new GithubPluginVersion($version)
-                    )))
+                       ->with($thePlugin)
                        ->andReturn($return);
     }
 }
