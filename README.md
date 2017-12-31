@@ -11,28 +11,41 @@ UK: **/ɡɪtˈæ.miːn/**
 * php zip
 * Git
 
-## initial setup
+## Installation
 
 ```bash
-# ln -s bin/console /usr/local/bin/console
+$ composer global require gitamine/gitamine 
+```
+
+## Usage
+
+In your git project run:
+
+```bash
 $ gitamine init
 ```
 
-## TODO
+After that you will need to create in your root project folder a gitamine file
 
-- decide how a plugin comunicates with gitanime 
-    * gitanime sends all data (only options as flags)
-    * plugin executes gitanime commands to get info (gitamine commands)
-- allow plugins to extend hooks (future)
-- phpunit plugin
-- phpcs plugin
-- composer plugin
-- codeception plugin
-- symfony plugin
-    * Create a listenér for Nektria to add [MIGRATION] when a migration is created
-    * Create a listenér for Nektria to add [COMPOSER] when composer is updated is created/updated
-        * composer install => checkout, created/updated
-    * Run composer install when the composer has been created/updated
+ 
+```yaml
+# gitamine.yaml
+gitamine:
+    __event__:
+        __plugin1__: ~
+        __plugin2__: ~
+        #...
+```
 
-Gitamine exception -> error code 1
-Plugin             -> error code 2
+For example, this will assure that the commit will execute phpunit, and if it fails, then the commit won't be done.
+
+```yaml
+# gitamine.yaml
+gitamine:
+    pre-commit:
+        phpunit: ~
+```
+
+## How to create a plugin
+
+TODO
