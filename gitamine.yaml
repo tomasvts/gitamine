@@ -4,27 +4,20 @@ gitamine:
     #test: ~
     shellcheck: ~
     composer: ~
-    phplint: ~
     yaml-lint: ~
     phpcs:
       interactive: false
       standard: PSR2
       enabled: true
       cbf: true
+    phpmd: ~
     phpunit:
-      bin: bin/phpunit
-      enabled: true
       min-coverage: 100
-      #configuration-file: phpunit.unit.xml
+      #TODO configuration-file: phpunit.unit.xml
 
   pre-push:
     codeception:
       enabled: false
     phpunit:
-      bin: bin/phpunit
       enabled: true
       min-coverage: 100
-      #configuration-file: phpunit.functional.xml
-
-# plugins contains an array of assoc arrays, 'enabled' is the only option that is used in gitamine, the other options
-# are sent to the plugin (don't know how)

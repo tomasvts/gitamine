@@ -32,6 +32,8 @@ class FilesDeletedCommand extends ContainerAwareCommand
     }
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *

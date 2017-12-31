@@ -87,7 +87,7 @@ class YamlGitamineConfig implements GitamineConfig
 
         $plugins = [];
 
-        foreach ($config['plugins'] as $plugin => $value) {
+        foreach (array_keys($config['plugins']) as $plugin) {
             $plugins[] = new Plugin($plugin);
         }
 
@@ -143,6 +143,8 @@ class YamlGitamineConfig implements GitamineConfig
     }
 
     /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     *
      * @return Directory
      */
     private function getHomeFolder(): Directory
@@ -168,16 +170,16 @@ class YamlGitamineConfig implements GitamineConfig
      */
     public function getGithubPluginName(GithubPlugin $plugin): string
     {
-        $ch = curl_init(
+        $curl = curl_init(
             sprintf(
                 'https://raw.githubusercontent.com/%s/%s/gitamine.json',
                 $plugin->name()->name(),
                 $plugin->version()->version()
             )
         );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         if ($httpCode !== 200) {
             //TODO add ... with version XXX
