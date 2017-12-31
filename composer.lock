@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8837853a0f70338b512d089b97080f62",
+    "content-hash": "954f94e331a2bb99a4b9722a170f0bb8",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2957,98 +2957,6 @@
             "time": "2017-12-15T02:05:18+00:00"
         },
         {
-            "name": "symfony/lts",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/lts.git",
-                "reference": "396c5fca8d73d01186df37d7031321a3c0c2bf92"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lts/zipball/396c5fca8d73d01186df37d7031321a3c0c2bf92",
-                "reference": "396c5fca8d73d01186df37d7031321a3c0c2bf92",
-                "shasum": ""
-            },
-            "conflict": {
-                "symfony/asset": ">=5",
-                "symfony/browser-kit": ">=5",
-                "symfony/cache": ">=5",
-                "symfony/class-loader": ">=5",
-                "symfony/config": ">=5",
-                "symfony/console": ">=5",
-                "symfony/css-selector": ">=5",
-                "symfony/debug": ">=5",
-                "symfony/debug-bundle": ">=5",
-                "symfony/dependency-injection": ">=5",
-                "symfony/doctrine-bridge": ">=5",
-                "symfony/dom-crawler": ">=5",
-                "symfony/dotenv": ">=5",
-                "symfony/event-dispatcher": ">=5",
-                "symfony/expression-language": ">=5",
-                "symfony/filesystem": ">=5",
-                "symfony/finder": ">=5",
-                "symfony/form": ">=5",
-                "symfony/framework-bundle": ">=5",
-                "symfony/http-foundation": ">=5",
-                "symfony/http-kernel": ">=5",
-                "symfony/inflector": ">=5",
-                "symfony/intl": ">=5",
-                "symfony/ldap": ">=5",
-                "symfony/lock": ">=5",
-                "symfony/monolog-bridge": ">=5",
-                "symfony/options-resolver": ">=5",
-                "symfony/process": ">=5",
-                "symfony/property-access": ">=5",
-                "symfony/property-info": ">=5",
-                "symfony/proxy-manager-bridge": ">=5",
-                "symfony/routing": ">=5",
-                "symfony/security": ">=5",
-                "symfony/security-bundle": ">=5",
-                "symfony/security-core": ">=5",
-                "symfony/security-csrf": ">=5",
-                "symfony/security-guard": ">=5",
-                "symfony/security-http": ">=5",
-                "symfony/serializer": ">=5",
-                "symfony/stopwatch": ">=5",
-                "symfony/symfony": ">=5",
-                "symfony/templating": ">=5",
-                "symfony/translation": ">=5",
-                "symfony/twig-bridge": ">=5",
-                "symfony/twig-bundle": ">=5",
-                "symfony/validator": ">=5",
-                "symfony/var-dumper": ">=5",
-                "symfony/web-link": ">=5",
-                "symfony/web-profiler-bundle": ">=5",
-                "symfony/web-server-bundle": ">=5",
-                "symfony/workflow": ">=5",
-                "symfony/yaml": ">=5"
-            },
-            "type": "metapackage",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4-dev"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Enforces Long Term Supported versions of Symfony components",
-            "homepage": "https://symfony.com",
-            "time": "2017-10-19T02:16:32+00:00"
-        },
-        {
             "name": "symfony/phpunit-bridge",
             "version": "v4.0.2",
             "source": {
@@ -3610,24 +3518,24 @@
         },
         {
             "name": "overtrue/phplint",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/phplint.git",
-                "reference": "583a7aa123d61a73d783a2fb2638371dafe9b8c6"
+                "reference": "95bc42f93b57f1a6352a26e9dd3754e49792bcb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/phplint/zipball/583a7aa123d61a73d783a2fb2638371dafe9b8c6",
-                "reference": "583a7aa123d61a73d783a2fb2638371dafe9b8c6",
+                "url": "https://api.github.com/repos/overtrue/phplint/zipball/95bc42f93b57f1a6352a26e9dd3754e49792bcb9",
+                "reference": "95bc42f93b57f1a6352a26e9dd3754e49792bcb9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
-                "symfony/console": "^2.7 || ^3.0 || ^4.0",
-                "symfony/finder": "^2.7 || ^3.0 || ^4.0",
-                "symfony/process": "^2.7 || ^3.0 || ^4.0",
-                "symfony/yaml": "^2.7 || ^3.0 || ^4.0"
+                "symfony/console": "^3.0|^4.0",
+                "symfony/finder": "^3.0|^4.0",
+                "symfony/process": "^3.0|^4.0",
+                "symfony/yaml": "^3.0|^4.0"
             },
             "bin": [
                 "bin/phplint"
@@ -3655,7 +3563,7 @@
                 "phplint",
                 "syntax"
             ],
-            "time": "2017-12-12T12:15:20+00:00"
+            "time": "2017-12-28T09:40:04+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -3890,9 +3798,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "symfony/lts": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
