@@ -3,7 +3,8 @@ gitamine:
   pre-commit:
     #test: ~
     shellcheck: ~
-    composer: ~
+    composer:
+      strict: false
     yaml-lint:
       bin: bin/yaml-lint
     phpcs:

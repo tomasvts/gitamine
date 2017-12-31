@@ -9,11 +9,9 @@ use Gitamine\Domain\Directory;
 use Gitamine\Domain\Event;
 use Gitamine\Domain\Plugin;
 use Gitamine\Exception\PluginExecutionFailedException;
-use Gitamine\Exception\PluginNotInstalledException;
 use Gitamine\Infrastructure\GitamineConfig;
 use Gitamine\Infrastructure\Output;
 use Gitamine\Query\GetProjectDirectoryQuery;
-use Prooph\ServiceBus\Exception\RuntimeException;
 
 /**
  * Class RunPluginCommandHandler
@@ -67,15 +65,36 @@ class RunPluginCommandHandler
 
         if ($options->enabled()) {
             $this->output->print(str_pad("<info>Running</info> {$plugin->name()}:", 36));
+            $row = $this->output->getCurrentLine();
+            $this->output->println('<pending> ◷</pending>');
+
             $success = $this->gitamine->runPlugin($plugin, $event, $options, $result);
+            $nextRow = $this->output->getCurrentLine();
+            $nextCol = $this->output->getCurrentColumn();
 
             if (!$success) {
-                $this->output->println("\t<fail>✘</fail>");
-                $this->output->println($result);
+                $this->output->moveTo($row, 0);
+                $this->output->clearLine();
+                $this->output->moveTo($row, 0);
+
+                $this->output->println(
+                    str_pad("<info>Running</info> {$plugin->name()}:", 36) .
+                    "\t<fail>✘</fail>"
+                );
+
+                $this->output->moveTo($nextRow, $nextCol);
+
                 throw new PluginExecutionFailedException('Failed', 2);
             }
 
-            $this->output->println("\t<success>✔</success>");
+            $this->output->moveTo($row, 0);
+            $this->output->clearLine();
+            $this->output->moveTo($row, 0);
+
+            $this->output->println(
+                str_pad("<info>Running</info> {$plugin->name()}:", 36) .
+                "\t<success>✔</success>"
+            );
         }
     }
 }
